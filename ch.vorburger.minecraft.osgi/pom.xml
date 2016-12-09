@@ -40,4 +40,11 @@
 
   </dependencies>
 
+  <licenses>
+    <license>
+      <name>GNU Affero General Public License v3.0 (AGPLv3)</name>
+      <url>https://www.gnu.org/licenses/agpl-3.0.txt</url>
+    </license>
+  </licenses>
+
 </project>

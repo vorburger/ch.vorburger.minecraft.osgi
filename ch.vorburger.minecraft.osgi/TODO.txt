@@ -1,13 +1,14 @@
 GitHub private
 
-LICENSE root file, and headers
-GitHub public
-
 example with spongeapi, without running in Sponge server, yet, using system package
 
 DS useful? see e.g. http://stackoverflow.com/questions/16707784/using-an-embedded-osgi-container
 
 use http://felix.apache.org/documentation/subprojects/apache-felix-file-install.html
+
+LICENSE headers & maven enforcement
+
+GitHub public & BLOG
 
 integrate an SSH OSGi shell, from Karaf?  NOT http://felix.apache.org/documentation/subprojects/apache-felix-remote-shell.html
 

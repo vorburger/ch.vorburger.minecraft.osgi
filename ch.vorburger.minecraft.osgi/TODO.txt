@@ -2,6 +2,8 @@ GitHub private
 
 example with spongeapi, without running in Sponge server, yet, using system package
 
+real test, which makes sure testplugin really started, and did something..
+
 DS useful? see e.g. http://stackoverflow.com/questions/16707784/using-an-embedded-osgi-container
 
 use http://felix.apache.org/documentation/subprojects/apache-felix-file-install.html

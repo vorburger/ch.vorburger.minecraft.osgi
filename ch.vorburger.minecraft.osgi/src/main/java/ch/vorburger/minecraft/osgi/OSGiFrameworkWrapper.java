@@ -1,5 +1,6 @@
 package ch.vorburger.minecraft.osgi;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,16 +25,15 @@ public class OSGiFrameworkWrapper {
 
     private final Framework framework;
 
-    public OSGiFrameworkWrapper() {
+    public OSGiFrameworkWrapper(File frameworkStorageDirectory) {
         Map<String, String> config = new HashMap<String, String>();
         // https://svn.apache.org/repos/asf/felix/releases/org.apache.felix.main-1.2.0/doc/launching-and-embedding-apache-felix.html#LaunchingandEmbeddingApacheFelix-configproperty
         config.put("felix.embedded.execution", "true");
         config.put(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, "J2SE-1.8");
         config.put(Constants.FRAMEWORK_STORAGE_CLEAN, Constants.FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT);
-        // TODO config.put(Constants.FRAMEWORK_STORAGE, "/Users/neil/osgidata");
+        config.put(Constants.FRAMEWORK_STORAGE, frameworkStorageDirectory.getAbsolutePath());
         // not FRAMEWORK_SYSTEMPACKAGES but _EXTRA
         config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, "org.slf4j;version=\"1.7\"");
-        // TODO: add more config properties?
 
         FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
         framework = frameworkFactory.newFramework(config);

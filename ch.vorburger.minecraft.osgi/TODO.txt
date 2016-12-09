@@ -1,4 +1,3 @@
-GitHub private
 
 example with spongeapi, without running in Sponge server, yet, using system package
 

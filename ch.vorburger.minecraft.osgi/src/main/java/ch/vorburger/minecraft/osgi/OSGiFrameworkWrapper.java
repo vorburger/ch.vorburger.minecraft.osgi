@@ -63,7 +63,9 @@ public class OSGiFrameworkWrapper {
         }
 
         for (Bundle bundle : bundlesToInstall) {
-            bundle.start();
+            if (bundle.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
+                bundle.start();
+            }
         }
     }
 

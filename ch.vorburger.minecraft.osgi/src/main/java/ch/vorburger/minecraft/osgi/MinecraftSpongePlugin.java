@@ -34,7 +34,6 @@ public class MinecraftSpongePlugin {
         File frameworkStorageDirectory = new File("osgi");
         osgiFramework = new OSGiFrameworkWrapper(frameworkStorageDirectory);
         osgiFramework.start();
-        // wrapper.installBundles("file:../ch.vorburger.minecraft.osgi.testplugin/target/osgi.testplugin-1.0.0-SNAPSHOT.jar");
     }
 
     @Listener

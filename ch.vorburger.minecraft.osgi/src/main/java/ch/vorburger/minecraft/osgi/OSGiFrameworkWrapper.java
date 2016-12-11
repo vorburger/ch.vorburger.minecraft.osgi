@@ -26,7 +26,7 @@ public class OSGiFrameworkWrapper {
     private final Framework framework;
 
     public OSGiFrameworkWrapper(File frameworkStorageDirectory) {
-        Map<String, String> config = new HashMap<String, String>();
+        Map<String, String> config = new HashMap<>();
         // https://svn.apache.org/repos/asf/felix/releases/org.apache.felix.main-1.2.0/doc/launching-and-embedding-apache-felix.html#LaunchingandEmbeddingApacheFelix-configproperty
         config.put("felix.embedded.execution", "true");
         config.put(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, "J2SE-1.8");
@@ -56,7 +56,7 @@ public class OSGiFrameworkWrapper {
 
     public void installBundles(String... locations) throws BundleException {
         BundleContext frameworkBundleContext = framework.getBundleContext();
-        List<Bundle> bundlesToInstall = new LinkedList<Bundle>();
+        List<Bundle> bundlesToInstall = new LinkedList<>();
 
         for (String location : locations) {
             bundlesToInstall.add(frameworkBundleContext.installBundle(location));
@@ -71,7 +71,7 @@ public class OSGiFrameworkWrapper {
 
     public void stop() throws InterruptedException, BundleException {
         framework.stop();
-        FrameworkEvent event = framework.waitForStop(7000);
+        FrameworkEvent event = framework.waitForStop(7000); // 7s
         loggingFrameworkListener.log(event);
     }
 

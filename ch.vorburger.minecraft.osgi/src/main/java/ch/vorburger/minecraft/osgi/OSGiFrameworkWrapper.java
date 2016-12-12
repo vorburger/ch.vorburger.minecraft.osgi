@@ -42,8 +42,15 @@ public class OSGiFrameworkWrapper {
         config.put(Constants.FRAMEWORK_STORAGE_CLEAN, Constants.FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT);
         config.put(Constants.FRAMEWORK_STORAGE, frameworkStorageDirectory.getAbsolutePath());
         // not FRAMEWORK_SYSTEMPACKAGES but _EXTRA
-        config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, "org.slf4j;version=\"1.7\"");
-            // TODO org.spongepowered.api.**
+        config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
+                "org.slf4j;version=\"1.7\","
+              + "org.spongepowered.api,"
+              + "org.spongepowered.api.command,"
+              + "org.spongepowered.api.command.args,"
+              + "org.spongepowered.api.command.spec,"
+              + "org.spongepowered.api.text"
+            );
+            // TODO list *ALL* org.spongepowered.api.** packages.. do it automatically, by reading them by reflection??
 
         FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
         framework = frameworkFactory.newFramework(config);

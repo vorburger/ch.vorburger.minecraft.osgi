@@ -11,14 +11,31 @@ public class Activator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        System.out.println("STDOUT started!");
-        LOG.info("LOG started!");
+        // System.out.println("STDOUT started!");
+        LOG.info("starting and registering command..");
+        try {
+            new CommandsSetUp().register();
+        } catch (Throwable t) {
+            LOG.error("boum", t);
+        }
+        LOG.info("started!");
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        System.out.println("STDOUT  stopped!");
-        LOG.info("LOG stopped!");
+        // System.out.println("STDOUT stopped!");
+        LOG.info("stopped!");
     }
 
+/*
+    private LogService getLogService() {
+        ServiceReference ref = context.getServiceReference(LogService.class.getName());
+        if (ref != null) {
+            LogService log = (LogService) context.getService(ref);
+            return log;
+
+        }
+        return null;
+    }
+*/
 }

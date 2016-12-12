@@ -20,7 +20,7 @@ public class LoggingFrameworkListener implements FrameworkListener {
             LOG.info("FrameworkEvent {} : {}", getFrameworkEventTypeText(event.getType()),
                     event.getBundle().getSymbolicName());
         } else {
-            LOG.info("FrameworkEvent {} : {}", getFrameworkEventTypeText(event.getType()),
+            LOG.error("FrameworkEvent {} : {}", getFrameworkEventTypeText(event.getType()),
                     event.getBundle().getSymbolicName(), event.getThrowable());
         }
     }

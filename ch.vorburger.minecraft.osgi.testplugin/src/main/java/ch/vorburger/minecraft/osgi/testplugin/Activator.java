@@ -16,7 +16,10 @@ public class Activator implements BundleActivator {
         try {
             new CommandsSetUp().register();
         } catch (Throwable t) {
+            // we MUST catch and log, because Felix itself does not, and this gets lost..
             LOG.error("boum", t);
+            // we rethrow, to fail the Bundle start
+            throw t;
         }
         LOG.info("started!");
     }
@@ -24,6 +27,7 @@ public class Activator implements BundleActivator {
     @Override
     public void stop(BundleContext context) throws Exception {
         // System.out.println("STDOUT stopped!");
+        // TODO unregister command!!
         LOG.info("stopped!");
     }
 

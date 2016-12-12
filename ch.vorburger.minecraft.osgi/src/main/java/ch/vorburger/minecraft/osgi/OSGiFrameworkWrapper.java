@@ -34,6 +34,7 @@ public class OSGiFrameworkWrapper {
 
     }
 
+    @SuppressWarnings("deprecation")
     public OSGiFrameworkWrapper(File frameworkStorageDirectory, File bootBundlesDirectory, File hotBundlesDirectory) {
         Map<String, String> config = new HashMap<>();
         // https://svn.apache.org/repos/asf/felix/releases/org.apache.felix.main-1.2.0/doc/launching-and-embedding-apache-felix.html#LaunchingandEmbeddingApacheFelix-configproperty
@@ -44,13 +45,14 @@ public class OSGiFrameworkWrapper {
         // not FRAMEWORK_SYSTEMPACKAGES but _EXTRA
         config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
                 "org.slf4j;version=\"1.7\","
+              + "ch.vorburger.minecraft.osgi.api,"
               + "org.spongepowered.api,"
               + "org.spongepowered.api.command,"
               + "org.spongepowered.api.command.args,"
               + "org.spongepowered.api.command.spec,"
               + "org.spongepowered.api.text"
+              // TODO list *ALL* org.spongepowered.api.** packages.. do it automatically, by reading them by reflection??
             );
-            // TODO list *ALL* org.spongepowered.api.** packages.. do it automatically, by reading them by reflection??
 
         FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
         framework = frameworkFactory.newFramework(config);
@@ -63,8 +65,10 @@ public class OSGiFrameworkWrapper {
      * http://njbartlett.name/2011/07/03/embedding-osgi.html
      *
      * http://felix.apache.org/documentation/subprojects/apache-felix-framework/apache-felix-framework-launching-and-embedding.html
+     *
+     * @return OSGi Framework System Bundle (#0)
      */
-    public void start() throws BundleException {
+    public Bundle start() throws BundleException {
         framework.init(loggingFrameworkListener);
         BundleContext frameworkBundleContext = framework.getBundleContext();
         frameworkBundleContext.addFrameworkListener(loggingFrameworkListener);
@@ -86,18 +90,20 @@ public class OSGiFrameworkWrapper {
             LOG.info("Going to (non-HOT) install {} OSGi System Boot Bundle JARs found in {}", jarFiles.length, bootBundlesDirectory);
             installBundles(jarFiles);
         }
+
+        return framework;
     }
 
-    public void installBundles(File... locations) throws BundleException {
+    public List<Bundle> installBundles(File... locations) throws BundleException {
         String[] locationsAsStringURI = new String[locations.length];
         for (int i = 0; i < locations.length; i++) {
             File location = locations[i];
             locationsAsStringURI[i] = location.toURI().toASCIIString();
         }
-        installBundles(locationsAsStringURI);
+        return installBundles(locationsAsStringURI);
     }
 
-    public void installBundles(String... locations) throws BundleException {
+    public List<Bundle> installBundles(String... locations) throws BundleException {
         BundleContext frameworkBundleContext = framework.getBundleContext();
         List<Bundle> bundlesToInstall = new LinkedList<>();
 
@@ -112,6 +118,8 @@ public class OSGiFrameworkWrapper {
                 LOG.info("Started bundle {}", bundle.getSymbolicName());
             }
         }
+
+        return bundlesToInstall;
     }
 
     public void stop() throws InterruptedException, BundleException {

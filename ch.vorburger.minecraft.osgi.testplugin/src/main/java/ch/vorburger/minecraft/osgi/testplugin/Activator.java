@@ -1,5 +1,6 @@
 package ch.vorburger.minecraft.osgi.testplugin;
 
+import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -14,7 +15,9 @@ public class Activator implements BundleActivator {
         // System.out.println("STDOUT started!");
         LOG.info("starting and registering command..");
         try {
-            new CommandsSetUp().register();
+            // new CommandsSetUp().register();
+            // TODO remove this when switching to annotation-based declarative services..
+            context.registerService(CommandRegistration.class, new HelloWorldCommandRegistration(), null);
         } catch (Throwable t) {
             // we MUST catch and log, because Felix itself does not, and this gets lost..
             LOG.error("boum", t);
@@ -26,9 +29,16 @@ public class Activator implements BundleActivator {
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        // System.out.println("STDOUT stopped!");
-        // TODO unregister command!!
-        LOG.info("stopped!");
+        try {
+            // System.out.println("STDOUT stopped!");
+            // NB: It's not required to release, this is automatic:
+            // context.ungetService(helloWorldCommandRegistrationServiceReference.getReference());
+            // helloWorldCommandRegistrationServiceReference.unregister();
+            LOG.info("stopped!");
+        } catch (Throwable t) {
+            LOG.error("boum", t);
+            throw t;
+        }
     }
 
 /*

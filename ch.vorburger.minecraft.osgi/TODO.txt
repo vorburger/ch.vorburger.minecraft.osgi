@@ -1,17 +1,9 @@
 
-example with spongeapi, without running in Sponge server, yet, using system package
-
-real test, which makes sure testplugin really started, and did something..
-
 DS useful? see e.g. http://stackoverflow.com/questions/16707784/using-an-embedded-osgi-container
-
-use http://felix.apache.org/documentation/subprojects/apache-felix-file-install.html
 
 LICENSE headers & maven enforcement
 
 GitHub public & BLOG
-
-integrate an SSH OSGi shell, from Karaf?  NOT http://felix.apache.org/documentation/subprojects/apache-felix-remote-shell.html
 
 Switch to Gradle instead of Maven.. how-to bnd for Gradle?
 

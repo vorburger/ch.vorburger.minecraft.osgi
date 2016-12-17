@@ -1,12 +1,15 @@
 package ch.vorburger.minecraft.osgi;
 
+import com.google.common.base.Joiner;
+import com.google.common.reflect.ClassPath;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -27,15 +30,14 @@ public class OSGiFrameworkWrapper {
     private final File bootBundlesDirectory;
     private final File hotBundlesDirectory;
 
-    public OSGiFrameworkWrapper(File osgiBaseDirectory) {
+    public OSGiFrameworkWrapper(File osgiBaseDirectory) throws IOException {
         this(new File(osgiBaseDirectory, "storage"),
              new File(osgiBaseDirectory, "boot"),
              new File(osgiBaseDirectory, "hot"));
-
     }
 
     @SuppressWarnings("deprecation")
-    public OSGiFrameworkWrapper(File frameworkStorageDirectory, File bootBundlesDirectory, File hotBundlesDirectory) {
+    public OSGiFrameworkWrapper(File frameworkStorageDirectory, File bootBundlesDirectory, File hotBundlesDirectory) throws IOException {
         Map<String, String> config = new HashMap<>();
         // https://svn.apache.org/repos/asf/felix/releases/org.apache.felix.main-1.2.0/doc/launching-and-embedding-apache-felix.html#LaunchingandEmbeddingApacheFelix-configproperty
         config.put("felix.embedded.execution", "true");
@@ -46,12 +48,7 @@ public class OSGiFrameworkWrapper {
         config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
                 "org.slf4j;version=\"1.7\","
               + "ch.vorburger.minecraft.osgi.api,"
-              + "org.spongepowered.api,"
-              + "org.spongepowered.api.command,"
-              + "org.spongepowered.api.command.args,"
-              + "org.spongepowered.api.command.spec,"
-              + "org.spongepowered.api.text"
-              // TODO list *ALL* org.spongepowered.api.** packages.. do it automatically, by reading them by reflection??
+              + getSubPackages("org.spongepowered.api")
             );
 
         FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
@@ -59,6 +56,13 @@ public class OSGiFrameworkWrapper {
 
         this.bootBundlesDirectory = bootBundlesDirectory;
         this.hotBundlesDirectory = hotBundlesDirectory;
+    }
+
+    private String getSubPackages(String basePackageName) throws IOException {
+        ClassPath classPath = ClassPath.from(getClass().getClassLoader());
+        Iterator<String> packageNames = classPath.getTopLevelClassesRecursive(basePackageName)
+            .stream().map(classInfo -> classInfo.getPackageName()).distinct().iterator();
+        return Joiner.on(",").join(packageNames);
     }
 
     /**

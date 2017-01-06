@@ -89,7 +89,7 @@ public class OSGiFrameworkWrapper {
 
         File[] jarFiles = bootBundlesDirectory.listFiles((dir, name) -> name.endsWith(".jar"));
         if (jarFiles == null) {
-            LOG.warn("Nothing found in {} (does not exist?", bootBundlesDirectory);
+            LOG.warn("Nothing found in {} (does not exist?)", bootBundlesDirectory);
         } else {
             LOG.info("Going to (non-HOT) install {} OSGi System Boot Bundle JARs found in {}", jarFiles.length, bootBundlesDirectory);
             installBundles(jarFiles);

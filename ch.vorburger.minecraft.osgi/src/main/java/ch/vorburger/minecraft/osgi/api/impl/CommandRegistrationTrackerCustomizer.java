@@ -41,15 +41,16 @@ public class CommandRegistrationTrackerCustomizer
     public CommandRegistration addingService(ServiceReference<CommandRegistration> reference) {
         CommandRegistration commandRegistration = context.getService(reference);
         Optional<CommandMapping> optionalCommandMapping; // = Optional.empty();
-//        if (pluginContainer != null) { // in integration tests this is null
+        // in integration tests pluginContainer is null
+        if (pluginContainer != null) {
             optionalCommandMapping = Sponge.getCommandManager()
                     .register(pluginContainer, commandRegistration.callable(), commandRegistration.aliases());
-//        }
-        optionalCommandMapping.ifPresent(commandMapping -> commandMappings.put(reference, commandMapping));
-        if (!optionalCommandMapping.isPresent()) {
-            LOG.warn("Command register failed: {}", commandRegistration);
-        } else {
-            LOG.info("Command registered: {}", commandRegistration);
+            optionalCommandMapping.ifPresent(commandMapping -> commandMappings.put(reference, commandMapping));
+            if (!optionalCommandMapping.isPresent()) {
+                LOG.warn("Command register failed: {}", commandRegistration);
+            } else {
+                LOG.info("Command registered: {}", commandRegistration);
+            }
         }
         return commandRegistration;
     }
@@ -62,7 +63,10 @@ public class CommandRegistrationTrackerCustomizer
 
     @Override
     public void removedService(ServiceReference<CommandRegistration> reference, CommandRegistration service) {
-        commandMappings.compute(reference, (k, v) -> { Sponge.getCommandManager().removeMapping(v); return null; });
+        // in integration tests pluginContainer is null
+        if (pluginContainer != null) {
+            commandMappings.compute(reference, (k, v) -> { Sponge.getCommandManager().removeMapping(v); return null; });
+        }
     }
 
 }

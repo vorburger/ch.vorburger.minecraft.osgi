@@ -1,0 +1,2 @@
+Bundle-Activator: \
+   ${classes;IMPLEMENTS;org.osgi.framework.BundleActivator}

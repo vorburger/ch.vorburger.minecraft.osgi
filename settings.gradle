@@ -1,0 +1,5 @@
+rootProject.name = 'ch.vorburger.minecraft.osgi.root'
+
+include 'ch.vorburger.minecraft.osgi',
+        'ch.vorburger.minecraft.osgi.api',
+        'ch.vorburger.minecraft.osgi.testplugin'

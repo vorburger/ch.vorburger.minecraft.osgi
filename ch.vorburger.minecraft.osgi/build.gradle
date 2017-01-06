@@ -1,0 +1,27 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+
+dependencies {
+  compile project(":ch.vorburger.minecraft.osgi.api")
+  compileOnly 'org.spongepowered:spongeapi:5.1.0-SNAPSHOT'
+  compile 'org.apache.felix:org.apache.felix.framework:5.6.1'
+
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.slf4j:slf4j-simple:1.7.21'
+  // MinecraftOSGiTest relies on testplugin having been built before:
+  testCompile project(":ch.vorburger.minecraft.osgi.testplugin")
+}
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+  }
+}
+
+shadowJar {
+  dependencies {
+    exclude(dependency('org.spongepowered:spongeapi'))
+  }
+}

@@ -1,0 +1,31 @@
+allprojects  {
+  apply plugin: 'maven'
+  apply plugin: 'eclipse'
+
+  group = 'ch.vorburger.minecraft'
+  version = '1.0.0-SNAPSHOT'
+}
+
+subprojects {
+  apply plugin: 'java'
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+
+  apply plugin: 'biz.aQute.bnd.builder'
+
+  repositories {
+    mavenLocal()
+    jcenter() // maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "http://repo.spongepowered.org/maven" }
+  }
+
+}
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.2.0'
+  }
+}

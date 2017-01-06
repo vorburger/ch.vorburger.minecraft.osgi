@@ -25,3 +25,11 @@ shadowJar {
     exclude(dependency('org.spongepowered:spongeapi'))
   }
 }
+
+artifacts {
+    shadowJar;
+}
+
+build.dependsOn(shadowJar);
+
+jar.enabled = false

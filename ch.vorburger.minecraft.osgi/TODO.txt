@@ -5,6 +5,4 @@ LICENSE headers & maven enforcement
 
 GitHub public & BLOG
 
-Switch to Gradle instead of Maven.. how-to bnd for Gradle?
-
 IDE integration... bndtools hot deploy how to?

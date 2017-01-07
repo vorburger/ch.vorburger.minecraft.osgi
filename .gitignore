@@ -1,8 +1,8 @@
-bin/
-target/
 .settings/
 .project
 .classpath
-dependency-reduced-pom.xml
+bin/
+
 .gradle/
 build/
+.gradletasknamecache

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public class LoggingServiceListener implements ServiceListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OSGiFrameworkWrapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoggingServiceListener.class);
 
     @Override
     public void serviceChanged(ServiceEvent event) {

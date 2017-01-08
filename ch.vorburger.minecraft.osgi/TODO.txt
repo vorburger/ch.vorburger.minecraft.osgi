@@ -1,8 +1,4 @@
 
 DS useful? see e.g. http://stackoverflow.com/questions/16707784/using-an-embedded-osgi-container
 
-LICENSE headers & maven enforcement
-
-GitHub public & BLOG
-
-IDE integration... bndtools hot deploy how to?
+BLOG, Video

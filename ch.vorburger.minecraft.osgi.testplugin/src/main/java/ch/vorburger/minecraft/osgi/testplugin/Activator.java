@@ -19,11 +19,13 @@
 package ch.vorburger.minecraft.osgi.testplugin;
 
 import ch.vorburger.minecraft.osgi.api.CommandRegistration;
+import ch.vorburger.minecraft.osgi.api.Listeners;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO remove this entire class when switching to annotation-based declarative services..
 public class Activator implements BundleActivator {
 
     private static final Logger LOG = LoggerFactory.getLogger(Activator.class);
@@ -36,6 +38,7 @@ public class Activator implements BundleActivator {
             // new CommandsSetUp().register();
             // TODO remove this when switching to annotation-based declarative services..
             context.registerService(CommandRegistration.class, new HelloWorldCommandRegistration(), null);
+            context.registerService(Listeners.class, new ExampleListeners(), null);
         } catch (Throwable t) {
             // we MUST catch and log, because Felix itself does not, and this gets lost..
             LOG.error("boum", t);

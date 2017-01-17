@@ -50,9 +50,11 @@ public class MinecraftOSGiTest {
         assertThat(testPluginBundle.getState(), is(Bundle.ACTIVE));
         ServiceReference<?>[] testPluginBundleServices = testPluginBundle.getRegisteredServices();
         assertThat(testPluginBundleServices, is(not(nullValue())));
-        assertThat(testPluginBundleServices.length, is(1));
+        assertThat(testPluginBundleServices.length, is(2));
         assertThat(testPluginBundleServices[0].getProperty("objectClass"),
-        		is(new String[] { "ch.vorburger.minecraft.osgi.api.CommandRegistration" }));
+                is(new String[] { "ch.vorburger.minecraft.osgi.api.CommandRegistration" }));
+        assertThat(testPluginBundleServices[1].getProperty("objectClass"),
+                is(new String[] { "ch.vorburger.minecraft.osgi.api.Listeners" }));
 
         testPluginBundle.uninstall();
         // TODO Test that the command got un-registered..

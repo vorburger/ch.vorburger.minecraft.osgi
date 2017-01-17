@@ -18,28 +18,28 @@
  */
 package ch.vorburger.minecraft.osgi.api.impl;
 
-import ch.vorburger.minecraft.osgi.api.CommandRegistration;
+import ch.vorburger.minecraft.osgi.api.Listeners;
 import java.util.Optional;
 import org.osgi.framework.BundleContext;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandMapping;
 import org.spongepowered.api.plugin.PluginContainer;
 
 // TODO replace this with OSGi DS equivalent
-public class CommandRegistrationTrackerCustomizer extends AbstractServiceTrackerCustomizer<CommandRegistration, CommandMapping> {
+public class ListenersTrackerCustomizer extends AbstractServiceTrackerCustomizer<Listeners, Object> {
 
-    protected CommandRegistrationTrackerCustomizer(BundleContext context, PluginContainer pluginContainer) {
+    public ListenersTrackerCustomizer(BundleContext context, PluginContainer pluginContainer) {
         super(context, pluginContainer);
     }
 
     @Override
-    protected Optional<CommandMapping> getRegistration(CommandRegistration service) {
-        return Sponge.getCommandManager().register(pluginContainer, service.callable(), service.aliases());
+    protected Optional<Object> getRegistration(Listeners service) {
+        Sponge.getEventManager().registerListeners(pluginContainer, service);
+        return Optional.of(service);
     }
 
     @Override
-    protected void removeRegistration(CommandMapping r) {
-         Sponge.getCommandManager().removeMapping(r);
+    protected void removeRegistration(Object r) {
+        Sponge.getEventManager().unregisterListeners(r);
     }
 
 }

@@ -18,23 +18,23 @@
  */
 package ch.vorburger.minecraft.osgi.testplugin;
 
-import ch.vorburger.minecraft.osgi.api.Listeners;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.event.network.ClientConnectionEvent.Login;
 import org.spongepowered.api.text.Text;
 
 // TODO @Service OSGi DS annotation
-public class ExampleListeners implements Listeners {
+public class ExampleEventListener implements EventListener<ClientConnectionEvent.Login> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExampleListeners.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExampleEventListener.class);
 
-    @Listener
-    public void onUserJoin(ClientConnectionEvent.Login loginEvent) {
+    @Override
+    public void handle(Login loginEvent) throws Exception {
         LOG.info("onUserJoin()");
         // NOTE there is also a Join instead of Login event type..
-        Text text = Text.of("WELCOME (Listeners)");
+        Text text = Text.of("WELCOME (EventListener)");
         // TODO This is wrong and not visible to end-user in UI:
         loginEvent.setMessage(text);
         // User user = loginEvent.getTargetUser();

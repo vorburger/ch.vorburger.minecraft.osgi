@@ -16,19 +16,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.vorburger.minecraft.osgi.api;
+package ch.vorburger.minecraft.osgi.tests;
 
-import org.spongepowered.api.event.EventManager;
-import org.spongepowered.api.event.Listener;
+import static org.junit.Assert.*;
+
+import ch.vorburger.minecraft.osgi.api.impl.EventListenerUtil;
+import org.junit.Test;
+import org.spongepowered.api.event.EventListener;
+import org.spongepowered.api.event.network.ClientConnectionEvent.Login;
 
 /**
- * Marker interface for classes with (public) methods annotated with
- * {@link Listener}. This allows instances of such classes to be discovered as
- * they're exposed as OSGi services, and to be auto-registered in
- * {@link EventManager#registerListeners(Object, Object)}.
+ * Unit test for EventListenerUtil.
  *
  * @author Michael Vorburger
  */
-public interface Listeners {
-    // TODO rename to EventListeners
+public class EventListenerUtilTest {
+
+    @Test
+    public void getEventClass() {
+        assertEquals(Login.class, EventListenerUtil.getEventClass(new TestEventListener()));
+    }
+
+    public static class TestEventListener implements EventListener<Login> {
+        @Override
+        public void handle(Login event) throws Exception {
+        }
+    }
 }

@@ -22,6 +22,7 @@ import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import ch.vorburger.minecraft.osgi.api.Listeners;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
+import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.plugin.PluginContainer;
 
 /**
@@ -33,17 +34,22 @@ import org.spongepowered.api.plugin.PluginContainer;
 public class ApiImplBootstrap {
 
     private ServiceTracker<Listeners, Listeners> listenersTracker;
+    @SuppressWarnings("rawtypes")
+    private ServiceTracker<EventListener, EventListener> eventListenerTracker;
     private ServiceTracker<CommandRegistration, CommandRegistration> commandRegistrationTracker;
 
     public void start(BundleContext bundleContext, PluginContainer pluginContainer) {
         listenersTracker = CommandRegistrationTrackerCustomizer.setUp(bundleContext, Listeners.class,
                 new ListenersTrackerCustomizer(bundleContext, pluginContainer));
+        eventListenerTracker = CommandRegistrationTrackerCustomizer.setUp(bundleContext, EventListener.class,
+                new EventListenerTrackerCustomizer(bundleContext, pluginContainer));
         commandRegistrationTracker = CommandRegistrationTrackerCustomizer.setUp(bundleContext, CommandRegistration.class,
                 new CommandRegistrationTrackerCustomizer(bundleContext, pluginContainer));
     }
 
     public void stop() {
         listenersTracker.close();
+        eventListenerTracker.close();
         commandRegistrationTracker.close();
     }
 

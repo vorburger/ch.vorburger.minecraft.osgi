@@ -50,11 +50,17 @@ public class MinecraftOSGiTest {
         assertThat(testPluginBundle.getState(), is(Bundle.ACTIVE));
         ServiceReference<?>[] testPluginBundleServices = testPluginBundle.getRegisteredServices();
         assertThat(testPluginBundleServices, is(not(nullValue())));
+        // TODO un-comment when https://github.com/SpongePowered/SpongeCommon/pull/1090 is merged
+        // assertThat(testPluginBundleServices.length, is(3));
         assertThat(testPluginBundleServices.length, is(2));
         assertThat(testPluginBundleServices[0].getProperty("objectClass"),
                 is(new String[] { "ch.vorburger.minecraft.osgi.api.CommandRegistration" }));
+        // TODO un-comment when https://github.com/SpongePowered/SpongeCommon/pull/1090 is merged
+        // assertThat(testPluginBundleServices[1].getProperty("objectClass"),
+        //        is(new String[] { "ch.vorburger.minecraft.osgi.api.Listeners" }));
+        // assertThat(testPluginBundleServices[2].getProperty("objectClass"),
         assertThat(testPluginBundleServices[1].getProperty("objectClass"),
-                is(new String[] { "ch.vorburger.minecraft.osgi.api.Listeners" }));
+                is(new String[] { "org.spongepowered.api.event.EventListener" }));
 
         testPluginBundle.uninstall();
         // TODO Test that the command got un-registered..

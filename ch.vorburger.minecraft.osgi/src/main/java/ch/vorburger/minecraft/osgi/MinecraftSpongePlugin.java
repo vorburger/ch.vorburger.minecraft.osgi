@@ -63,8 +63,12 @@ public class MinecraftSpongePlugin {
 
     @Listener
     public void disable(GameStoppingServerEvent event) throws Exception {
-        apiBootstrap.stop();
-        osgiFramework.stop();
+        if (apiBootstrap != null) {
+			apiBootstrap.stop();
+		}
+        if (osgiFramework != null) {
+			osgiFramework.stop();
+		}
     }
 
 }

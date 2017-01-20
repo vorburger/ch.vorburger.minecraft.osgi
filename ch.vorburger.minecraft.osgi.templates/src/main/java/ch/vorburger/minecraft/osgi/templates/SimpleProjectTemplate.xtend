@@ -41,7 +41,7 @@ class SimpleProjectTemplate implements ProjectTemplate {
 
             repositories {
               mavenLocal()
-              jcenter() // maven { url "http://repo.maven.apache.org/maven2" }
+              jcenter()
               maven { url "http://repo.spongepowered.org/maven" }
             }
 

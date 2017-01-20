@@ -18,8 +18,15 @@
  */
 package ch.vorburger.minecraft.osgi.users;
 
+import ch.vorburger.minecraft.osgi.templates.ProjectWriter;
+import ch.vorburger.minecraft.osgi.templates.SimpleProjectTemplate;
 import ch.vorburger.osgi.gradle.SourceInstallService;
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.Future;
+import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
@@ -28,6 +35,8 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 public class PlayerJoinListener implements EventListener<ClientConnectionEvent.Join> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PlayerJoinListener.class);
 
     private final SourceInstallService sourceInstallService;
 
@@ -40,22 +49,29 @@ public class PlayerJoinListener implements EventListener<ClientConnectionEvent.J
         Player player = joinEvent.getTargetEntity();
         String name = player.getName();
 
-        setUpDeveloper(player);
-
-        player.sendMessage(Text.builder("HELO, welcome...").color(TextColors.GOLD).append(Text.of(name)).build());
-        // player.sendTitle(title);
+        // TODO extract a lambda helper for this typical pattern...
+        try {
+            setUpDeveloper(player);
+            // player.sendTitle(title);
+            player.sendMessage(Text.builder("HELO, welcome...").color(TextColors.GOLD).append(Text.of(name)).build());
+            // TODO show end-user the URL of the editor!
+        } catch (IOException e) {
+            player.sendMessage(Text.builder(e.getMessage()).color(TextColors.RED).build());
+            LOG.error("Failed to create dev project for user: {}", name, e);
+        }
     }
 
-    private void setUpDeveloper(Player player) {
+    // TODO return CompletableFuture<URI> with editor URL for user to open!
+    private void setUpDeveloper(Player player) throws IOException {
         File devRoot = new File("dev");
         String uuid = player.getUniqueId().toString();
         File userProjects = new File(devRoot, uuid);
         File userProject1 = new File(userProjects, "project1");
         if (!userProject1.exists()) {
             userProject1.mkdirs();
-            // TODO copy default project like testplugin into userProject1! Use Xtend template!
+            new ProjectWriter().writeProject(new SimpleProjectTemplate(), userProject1);
         }
-        sourceInstallService.installSourceBundle(userProject1);
+        Future<Bundle> bundleFuture = sourceInstallService.installSourceBundle(userProject1);
     }
 
 }

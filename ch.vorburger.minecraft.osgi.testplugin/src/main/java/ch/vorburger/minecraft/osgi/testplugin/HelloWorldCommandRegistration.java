@@ -19,12 +19,17 @@
 package ch.vorburger.minecraft.osgi.testplugin;
 
 import ch.vorburger.minecraft.osgi.api.CommandRegistrationImpl;
+import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.text.Text;
 
 // TODO @Service OSGi DS annotation
 public class HelloWorldCommandRegistration extends CommandRegistrationImpl {
 
     public HelloWorldCommandRegistration() {
-        super(new CommandsSetUp().helloCommandSpec(), "helloworld", "hello", "test");
+        super(CommandSpec.builder()
+                .description(Text.of("Hello World Command"))
+                .executor(new HelloWorldCommand())
+                .build(), "helloworld", "hello", "test");
     }
 
 }

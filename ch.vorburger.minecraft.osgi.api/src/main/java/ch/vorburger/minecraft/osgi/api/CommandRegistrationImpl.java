@@ -18,7 +18,7 @@
  */
 package ch.vorburger.minecraft.osgi.api;
 
-import java.util.Arrays;
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.spongepowered.api.command.CommandCallable;
 
@@ -29,17 +29,19 @@ public class CommandRegistrationImpl implements CommandRegistration {
 
     protected CommandRegistrationImpl(CommandCallable callable, List<String> aliases) {
         this.callable = callable;
-        this.aliases = aliases;
+        this.aliases = ImmutableList.copyOf(aliases);
     }
 
     protected CommandRegistrationImpl(CommandCallable callable, String... alias) {
-        this(callable, Arrays.asList(alias));
+        this(callable, ImmutableList.copyOf(alias));
     }
 
+    @Override
     public CommandCallable callable() {
         return callable;
     }
 
+    @Override
     public List<String> aliases() {
         return aliases;
     }

@@ -37,7 +37,7 @@ public class Activator implements BundleActivator {
         try {
             // new CommandsSetUp().register();
             // TODO remove this when switching to annotation-based declarative services..
-            context.registerService(CommandRegistration.class, new HelloWorldCommandRegistration(), null);
+            context.registerService(CommandRegistration.class, new HelloWorldCommand(), null);
             // TODO un-comment when https://github.com/SpongePowered/SpongeCommon/pull/1090 is merged
             // context.registerService(Listeners.class, new ExampleListeners(), null);
             context.registerService(EventListener.class, new ExampleEventListener(), null);

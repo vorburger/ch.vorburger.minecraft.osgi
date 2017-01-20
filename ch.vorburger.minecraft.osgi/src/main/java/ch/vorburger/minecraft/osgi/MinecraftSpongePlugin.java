@@ -18,10 +18,8 @@
  */
 package ch.vorburger.minecraft.osgi;
 
-import ch.vorburger.minecraft.osgi.api.impl.ApiImplBootstrap;
+import ch.vorburger.osgi.utils.BundleInstaller;
 import com.google.inject.Inject;
-import java.io.File;
-import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
@@ -46,29 +44,20 @@ public class MinecraftSpongePlugin {
     // @Inject @DefaultConfig(sharedRoot = true) private ConfigurationLoader<CommentedConfigurationNode> configLoader;
     // @Inject private Game game;
 
-    private OSGiFrameworkWrapper osgiFramework;
-    private ApiImplBootstrap apiBootstrap;
+    private BundleInstaller osgiFramework;
 
     @Listener
     // public void onPreInit(GamePreInitializationEvent event) throws BundleException {
     public void onGameStartingServerEvent(GameStartingServerEvent event) throws Exception {
         logger.info("onGameStartingServerEvent()");
-        File frameworkStorageDirectory = new File("osgi");
-        osgiFramework = new OSGiFrameworkWrapper(frameworkStorageDirectory);
-        Bundle systemBundle = osgiFramework.start();
-
-        apiBootstrap = new ApiImplBootstrap();
-        apiBootstrap.start(systemBundle.getBundleContext(), pluginContainer);
+        osgiFramework = Bootstrap.bootstrapMinecraftOSGi("osgi", pluginContainer);
     }
 
     @Listener
     public void disable(GameStoppingServerEvent event) throws Exception {
-        if (apiBootstrap != null) {
-			apiBootstrap.stop();
-		}
         if (osgiFramework != null) {
-			osgiFramework.stop();
-		}
+            osgiFramework.close();
+        }
     }
 
 }

@@ -3,4 +3,6 @@ rootProject.name = 'ch.vorburger.minecraft.osgi.root'
 include 'ch.vorburger.minecraft.osgi',
         'ch.vorburger.minecraft.osgi.api',
         'ch.vorburger.minecraft.osgi.testplugin',
+        'ch.vorburger.minecraft.osgi.templates',
+        'ch.vorburger.minecraft.osgi.templates.test',
         'ch.vorburger.minecraft.osgi.users'

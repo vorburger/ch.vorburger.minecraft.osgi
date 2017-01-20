@@ -18,6 +18,7 @@
  */
 package ch.vorburger.minecraft.osgi;
 
+import ch.vorburger.osgi.utils.BundleInstaller;
 import com.google.common.base.Joiner;
 import com.google.common.reflect.ClassPath;
 import java.io.File;
@@ -38,7 +39,7 @@ import org.osgi.framework.launch.FrameworkFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OSGiFrameworkWrapper {
+public class OSGiFrameworkWrapper implements BundleInstaller {
 
     private static final Logger LOG = LoggerFactory.getLogger(OSGiFrameworkWrapper.class);
 
@@ -116,6 +117,7 @@ public class OSGiFrameworkWrapper {
         return framework;
     }
 
+    @Override
     public List<Bundle> installBundles(File... locations) throws BundleException {
         String[] locationsAsStringURI = new String[locations.length];
         for (int i = 0; i < locations.length; i++) {
@@ -125,6 +127,7 @@ public class OSGiFrameworkWrapper {
         return installBundles(locationsAsStringURI);
     }
 
+    @Override
     public List<Bundle> installBundles(String... locations) throws BundleException {
         BundleContext frameworkBundleContext = framework.getBundleContext();
         List<Bundle> bundlesToInstall = new LinkedList<>();
@@ -148,6 +151,16 @@ public class OSGiFrameworkWrapper {
         framework.stop();
         FrameworkEvent event = framework.waitForStop(7000); // 7s
         loggingFrameworkListener.log(event);
+    }
+
+    @Override
+    public void close() throws Exception {
+        this.stop();
+    }
+
+    @Override
+    public BundleContext getBundleContext() {
+        return framework.getBundleContext();
     }
 
 }

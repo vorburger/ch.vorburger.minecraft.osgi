@@ -1,0 +1,14 @@
+plugins {
+  id "org.xtend.xtend" version "0.4.14"
+}
+
+dependencies {
+  compile 'org.osgi:org.osgi.core:6.0.0'
+  compile 'com.google.guava:guava:20.0'
+  compile 'org.eclipse.xtend:org.eclipse.xtend.lib:2.10.0'
+
+  testCompile 'junit:junit:4.12'
+  testCompile 'commons-io:commons-io:2.5'
+  testCompile 'org.slf4j:slf4j-simple:1.7.21'
+  testCompile 'ch.vorburger.osgi.gradle:ch.vorburger.osgi.gradle:1.0.0-SNAPSHOT' // project(":ch.vorburger.osgi.gradle")
+}

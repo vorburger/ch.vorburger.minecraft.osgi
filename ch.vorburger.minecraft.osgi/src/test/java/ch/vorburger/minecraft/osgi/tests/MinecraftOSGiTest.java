@@ -18,30 +18,23 @@
  */
 package ch.vorburger.minecraft.osgi.tests;
 
-import java.io.File;
-import java.util.List;
-import org.junit.Test;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceReference;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import ch.vorburger.minecraft.osgi.OSGiFrameworkWrapper;
-import ch.vorburger.minecraft.osgi.api.impl.ApiImplBootstrap;
+import ch.vorburger.minecraft.osgi.Bootstrap;
+import ch.vorburger.osgi.utils.BundleInstaller;
+import java.util.List;
+import org.junit.Test;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
 
 public class MinecraftOSGiTest {
 
     @Test
     public void testMain() throws Exception {
-        // as in MinecraftSpongePlugin
-        File temp = new File("target/testOsgiFramework");
-        OSGiFrameworkWrapper osgiFramework = new OSGiFrameworkWrapper(temp);
-        Bundle systemBundle = osgiFramework.start();
-        ApiImplBootstrap apiBootstrap = new ApiImplBootstrap();
-        apiBootstrap.start(systemBundle.getBundleContext(), null);
+        BundleInstaller osgiFramework = Bootstrap.bootstrapMinecraftOSGi("target/testOsgiFramework", null);
 
         List<Bundle> bundles = osgiFramework.installBundles("file:../ch.vorburger.minecraft.osgi.testplugin/build/libs/ch.vorburger.minecraft.osgi.testplugin-1.0.0-SNAPSHOT.jar");
         Bundle testPluginBundle = bundles.get(0);
@@ -65,9 +58,7 @@ public class MinecraftOSGiTest {
         testPluginBundle.uninstall();
         // TODO Test that the command got un-registered..
 
-        // as in MinecraftSpongePlugin
-        apiBootstrap.stop();
-        osgiFramework.stop();
+        osgiFramework.close();
     }
 
 }

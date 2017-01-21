@@ -45,7 +45,7 @@ class SimpleProjectTemplate implements ProjectTemplate {
             targetCompatibility = 1.8
 
             dependencies {
-              compile 'ch.vorburger.minecraft:osgi.api:1.0.0-SNAPSHOT'
+              compile 'ch.vorburger.minecraft:ch.vorburger.minecraft.osgi.api:1.0.0-SNAPSHOT'
               compile 'org.osgi:org.osgi.core:6.0.0'
             }
 

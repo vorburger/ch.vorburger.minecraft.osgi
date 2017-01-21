@@ -56,8 +56,9 @@ public class PlayerJoinListener implements EventListener<ClientConnectionEvent.J
             player.sendMessage(Text.builder("HELO, welcome...").color(TextColors.GOLD).append(Text.of(name)).build());
             // TODO show end-user the URL of the editor!
         } catch (IOException e) {
-            player.sendMessage(Text.builder(e.getMessage()).color(TextColors.RED).build());
+            // FIRST log, then sendMessage() - in case sendMessage also fails
             LOG.error("Failed to create dev project for user: {}", name, e);
+            player.sendMessage(Text.builder(e.getMessage()).color(TextColors.RED).build());
         }
     }
 

@@ -33,7 +33,6 @@ subprojects {
   apply plugin: 'biz.aQute.bnd.builder'
 
   repositories {
-    mavenLocal()
     jcenter() // maven { url "http://repo.maven.apache.org/maven2" }
     maven { url "http://repo.spongepowered.org/maven" }
   }

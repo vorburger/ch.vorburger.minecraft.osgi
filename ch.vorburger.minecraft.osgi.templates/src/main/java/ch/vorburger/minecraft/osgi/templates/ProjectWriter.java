@@ -32,7 +32,7 @@ public class ProjectWriter {
         for (Entry<String, String> entry : files.entrySet()) {
             File file = new File(baseDir, entry.getKey());
             File parentDirectory = file.getParentFile();
-            if (!parentDirectory.equals(baseDir)) {
+            if (!parentDirectory.exists()) {
                 if (!file.getParentFile().mkdirs()) {
                     throw new IOException("Failed to mkdirs: " + parentDirectory);
                 }

@@ -20,16 +20,9 @@ package ch.vorburger.minecraft.osgi.templates
 
 class SimpleProjectTemplate implements ProjectTemplate {
 
+    // TODO make package flexible!
     override newProject() {
-        #{
-            buildGradle(),
-            bnd(),
-            sources()
-        }
-    }
-
-    def buildGradle() {
-        "build.gradle" -> '''
+        #{"build.gradle" -> '''
             buildscript {
               repositories {
                 jcenter()
@@ -55,27 +48,24 @@ class SimpleProjectTemplate implements ProjectTemplate {
               compile 'ch.vorburger.minecraft:osgi.api:1.0.0-SNAPSHOT'
               compile 'org.osgi:org.osgi.core:6.0.0'
             }
-        '''
-    }
 
-    def bnd() {
-        "bnd.bnd" -> '''
+        ''', "bnd.bnd" -> '''
             Bundle-Activator: ${classes;IMPLEMENTS;org.osgi.framework.BundleActivator}
-        '''
-    }
 
-    def sources() {
-        // TODO make package flexible
-        "src/main/java/test/Activator.java" -> '''
-            package test;
+        ''', "src/main/java/demo/Activator.java" -> '''
+            package demo;
 
+            import ch.vorburger.minecraft.osgi.api.CommandRegistration;
             import org.osgi.framework.BundleActivator;
             import org.osgi.framework.BundleContext;
+            import org.spongepowered.api.event.EventListener;
 
             public class Activator implements BundleActivator {
 
                 @Override
                 public void start(BundleContext context) throws Exception {
+                    context.registerService(CommandRegistration.class, new HelloWorldCommand(), null);
+                    context.registerService(EventListener.class, new ExampleEventListener(), null);
                 }
 
                 @Override
@@ -83,8 +73,65 @@ class SimpleProjectTemplate implements ProjectTemplate {
                 }
 
             }
-        '''
-    }
 
+        ''', "src/main/java/demo/HelloWorldCommand.java" -> '''
+            package demo;
+
+            import ch.vorburger.minecraft.osgi.api.CommandRegistration;
+            import com.google.common.collect.ImmutableList;
+            import java.util.List;
+            import org.spongepowered.api.command.CommandCallable;
+            import org.spongepowered.api.command.CommandException;
+            import org.spongepowered.api.command.CommandResult;
+            import org.spongepowered.api.command.CommandSource;
+            import org.spongepowered.api.command.args.CommandContext;
+            import org.spongepowered.api.command.spec.CommandExecutor;
+            import org.spongepowered.api.command.spec.CommandSpec;
+            import org.spongepowered.api.text.Text;
+
+            public class HelloWorldCommand implements CommandRegistration, CommandExecutor {
+
+                @Override
+                public List<String> aliases() {
+                    return ImmutableList.of("helloworld", "hello", "test");
+                }
+
+                @Override
+                public CommandCallable callable() {
+                    return CommandSpec.builder()
+                            .description(Text.of("Hello World Command"))
+                            .executor(this)
+                            .build();
+                }
+
+                @Override
+                public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+                    src.sendMessage(Text.of("Hello World!"));
+                    return CommandResult.success();
+                }
+
+            }
+
+        ''', "src/main/java/demo/ExampleEventListener.java" -> '''
+            package demo;
+
+            import org.spongepowered.api.entity.living.player.Player;
+            import org.spongepowered.api.event.EventListener;
+            import org.spongepowered.api.event.network.ClientConnectionEvent;
+            import org.spongepowered.api.event.network.ClientConnectionEvent.Join;
+            import org.spongepowered.api.text.Text;
+
+            public class ExampleEventListener implements EventListener<ClientConnectionEvent.Join> {
+
+                @Override
+                public void handle(Join joinEvent) throws Exception {
+                    Player player = joinEvent.getTargetEntity();
+                    String name = player.getName();
+                    player.sendMessage(Text.builder("Salut ").append(Text.of(name)).build());
+                }
+
+            }
+        '''}
+    }
 
 }

@@ -1,0 +1,6 @@
+
+dependencies {
+  compile project(":ch.vorburger.minecraft.osgi.api")
+  compile 'ch.vorburger.osgi.gradle:ch.vorburger.osgi.gradle:1.0.0-SNAPSHOT' // project(":ch.vorburger.osgi.gradle")
+  compile 'org.osgi:org.osgi.core:6.0.0'
+}

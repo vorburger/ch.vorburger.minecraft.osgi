@@ -5,4 +5,5 @@ include 'ch.vorburger.minecraft.osgi',
         'ch.vorburger.minecraft.osgi.testplugin',
         'ch.vorburger.minecraft.osgi.templates',
         'ch.vorburger.minecraft.osgi.templates.test',
-        'ch.vorburger.minecraft.osgi.users'
+        'ch.vorburger.minecraft.osgi.users',
+        'ch.vorburger.minecraft.osgi.dev'

@@ -18,18 +18,11 @@
  */
 package ch.vorburger.minecraft.osgi.users;
 
+import ch.vorburger.minecraft.osgi.dev.BundleManager;
 import ch.vorburger.minecraft.osgi.templates.ProjectWriter;
 import ch.vorburger.minecraft.osgi.templates.SimpleProjectTemplate;
-import ch.vorburger.osgi.gradle.SourceInstallService;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import java.io.File;
 import java.io.IOException;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
@@ -39,12 +32,10 @@ import org.spongepowered.api.text.format.TextColors;
 
 public class PlayerJoinListener implements EventListener<ClientConnectionEvent.Join> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PlayerJoinListener.class);
+    private final BundleManager bundleManager;
 
-    private final SourceInstallService sourceInstallService;
-
-    public PlayerJoinListener(SourceInstallService sourceInstallService) {
-        this.sourceInstallService = sourceInstallService;
+    public PlayerJoinListener(BundleManager bundleManager) {
+        this.bundleManager = bundleManager;
     }
 
     @Override
@@ -52,9 +43,11 @@ public class PlayerJoinListener implements EventListener<ClientConnectionEvent.J
         Player player = joinEvent.getTargetEntity();
         String name = player.getName();
 
-        setUpDeveloper(player);
         // player.sendTitle(title);
         player.sendMessage(Text.builder("HELO, welcome...").color(TextColors.GOLD).append(Text.of(name)).build());
+
+        setUpDeveloper(player);
+
         // TODO show end-user the URL of the editor!
     }
 
@@ -68,27 +61,7 @@ public class PlayerJoinListener implements EventListener<ClientConnectionEvent.J
             userProject1.mkdirs();
             new ProjectWriter().writeProject(new SimpleProjectTemplate(), userProject1);
         }
-        ListenableFuture<Bundle> bundleFuture = sourceInstallService.installSourceBundle(userProject1);
-        // TODO extract a lambda helper for this typical pattern...
-        Futures.addCallback(bundleFuture, new FutureCallback<Bundle>() {
-
-            @Override
-            public void onSuccess(Bundle bundle) {
-                try {
-                    bundle.start();
-                    player.sendMessage(Text.builder("Install successful").color(TextColors.GREEN).append().build());
-                } catch (BundleException e) {
-                    onFailure(e);
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                // FIRST log, then sendMessage() - just in case sendMessage also fails
-                LOG.error("Build or Install failed", throwable);
-                player.sendMessage(Text.builder("Install failed:" + throwable.getMessage()).color(TextColors.RED).append().build());
-            }
-        } );
+        bundleManager.installBundle(player, userProject1);
     }
 
 }

@@ -33,9 +33,9 @@ import org.spongepowered.api.plugin.PluginContainer;
  *
  * @author Michael Vorburger
  */
-@Plugin(id = "ch_vorburger_minecraft_osgi", name = "Vorburger.ch's OSGi-based HOT (re)load", version = "4.0.0-SNAPSHOT",
-    description = "Loads and reloads other plugins on changes; useful for development.",
-    // TODO " Currently requires patched Sponge (with support for HotPluginManager)",
+@Plugin(id = "osgi", name = "Vorburger.ch's OSGi-based HOT (re)load", version = "4.0.0-SNAPSHOT",
+    description = "Loads and reloads other Minecraft plugins (as OSGi bundles)",
+    url = "https://github.com/vorburger/ch.vorburger.minecraft.osgi",
     authors = "Michael Vorburger.ch")
 public class MinecraftSpongePlugin {
 

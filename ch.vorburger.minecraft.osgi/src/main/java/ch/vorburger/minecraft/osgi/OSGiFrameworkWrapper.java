@@ -22,6 +22,7 @@ import ch.vorburger.osgi.embedded.PackagesBuilder;
 import ch.vorburger.osgi.utils.BundleInstaller;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -126,22 +127,34 @@ public class OSGiFrameworkWrapper implements BundleInstaller {
 
     @Override
     public List<Bundle> installBundles(String... locations) throws BundleException {
+        List<String> sortedLocations = Arrays.asList(locations);
+        sortedLocations.sort((o1, o2) -> o1.compareTo(o2));
+        LOG.info("Sorted locations; now going to install and start OSGi bundles in this order: {}", sortedLocations);
+
         BundleContext frameworkBundleContext = framework.getBundleContext();
-        List<Bundle> bundlesToInstall = new LinkedList<>();
+        List<Bundle> bundlesToStart = new LinkedList<>();
 
-        for (String location : locations) {
-            bundlesToInstall.add(frameworkBundleContext.installBundle(location));
-            LOG.info("Installed bundle from {}", location);
-        }
-
-        for (Bundle bundle : bundlesToInstall) {
-            if (bundle.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
-                bundle.start();
-                LOG.info("Started bundle {}", bundle.getSymbolicName());
+        for (String location : sortedLocations) {
+            try {
+                bundlesToStart.add(frameworkBundleContext.installBundle(location));
+                LOG.info("Installed bundle from {}", location);
+            } catch (BundleException e) {
+                LOG.error("Failed to install bundle from {}", location, e);
             }
         }
 
-        return bundlesToInstall;
+        for (Bundle bundle : bundlesToStart) {
+            if (bundle.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
+                try {
+                    bundle.start();
+                    LOG.info("Started bundle {}", bundle.getSymbolicName());
+                } catch (BundleException e) {
+                    LOG.error("Failed to start bundle {}", bundle.getSymbolicName(), e);
+                }
+            }
+        }
+
+        return bundlesToStart;
     }
 
     public void stop() throws InterruptedException, BundleException {

@@ -16,26 +16,28 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.vorburger.minecraft.osgi.users;
+package ch.vorburger.minecraft.osgi.dev.internal;
 
+import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import ch.vorburger.minecraft.osgi.dev.BundleManager;
+import ch.vorburger.minecraft.osgi.dev.commands.InstallCommand;
+import ch.vorburger.osgi.gradle.SourceInstallService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.spongepowered.api.event.EventListener;
 
-// TODO remove once @Component on UsersPlugin (UsersComponent?) works
 public class Activator implements BundleActivator {
 
-    private BundleManager bundleManager;
+    private SourceInstallService sourceInstallService;
 
     @Override
     public void start(BundleContext context) throws Exception {
-        ServiceReference<BundleManager> ref = context.getServiceReference(BundleManager.class);
+        ServiceReference<SourceInstallService> ref = context.getServiceReference(SourceInstallService.class);
         if (ref != null) {
-            bundleManager = context.getService(ref);
-            PlayerJoinListener playerJoinListener = new PlayerJoinListener(bundleManager);
-            context.registerService(EventListener.class, playerJoinListener, null);
+            sourceInstallService = context.getService(ref);
+            BundleManager bundleManager = new BundleManager(sourceInstallService);
+            context.registerService(BundleManager.class, bundleManager, null);
+            context.registerService(CommandRegistration.class, new InstallCommand(bundleManager), null);
         } else {
             throw new IllegalStateException("SourceInstallService not found (yet, change start order; DS SCR later)");
         }
@@ -43,6 +45,9 @@ public class Activator implements BundleActivator {
 
     @Override
     public void stop(BundleContext context) throws Exception {
+        if (sourceInstallService != null) {
+            sourceInstallService.close();
+        }
     }
 
 }

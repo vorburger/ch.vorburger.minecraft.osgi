@@ -16,15 +16,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.vorburger.minecraft.osgi.dev.commands;
-
-import static org.spongepowered.api.command.args.GenericArguments.onlyOne;
-import static org.spongepowered.api.command.args.GenericArguments.string;
+package ch.vorburger.minecraft.worlds;
 
 import ch.vorburger.minecraft.osgi.api.CommandRegistration;
-import ch.vorburger.minecraft.osgi.dev.BundleManager;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -32,40 +29,39 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.world.storage.WorldProperties;
 
-/**
- * The "/osgi:install <uri>" command.
- *
- * @author Michael Vorburger.ch
- */
-public class InstallCommand implements CommandRegistration, CommandExecutor {
-
-    private final BundleManager bundleManager;
-
-    public InstallCommand(BundleManager bundleManager) {
-        this.bundleManager = bundleManager;
-    }
+public class ListWorldsCommand implements CommandRegistration, CommandExecutor {
 
     @Override
     public List<String> aliases() {
-        return ImmutableList.of("install");
+        return ImmutableList.of("lsw", "worlds-list");
     }
 
     @Override
     public CommandCallable callable() {
         return CommandSpec.builder()
-                .description(Text.of("installs an OSGi bundle"))
-                // TODO .permission("osgi.install")
-                .arguments(onlyOne(string(Text.of("uri"))))
+                .description(Text.of("lists available worlds on this server"))
                 .executor(this)
                 .build();
     }
 
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext args) throws CommandException {
-        String bundleURI = args.<String>getOne("uri").get();
-        bundleManager.installBundle(commandSource, bundleURI);
+        for (WorldProperties wordProperties : Sponge.getServer().getAllWorldProperties()) {
+            // TODO print a table with more properties
+            // TODO make world name clickable to /tpw to
+            String line = wordProperties.getWorldName();
+            if (commandSource instanceof Player) {
+                Player player = (Player) commandSource;
+                if (player.getLocation().getExtent().getName().equals(wordProperties.getWorldName())) {
+                    line += " <==";
+                }
+            }
+            commandSource.sendMessage(Text.of(line));
+        }
         return CommandResult.success();
     }
 

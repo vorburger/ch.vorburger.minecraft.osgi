@@ -63,10 +63,13 @@ public class BundleManager {
     }
 
     private void installBundle(MessageReceiver commandSource, File bundleFileOrDirectory) {
+        // TODO create and pass-through some sort of abstraction with a getDescription() so for projects it doesn't show absolute file URI
+        // or (!) make project and URI type?  Look at PAX
+        commandSource.sendMessage(Text.builder("OK; will install " + bundleFileOrDirectory).build());
         MessageReceivers.addCallback(sourceInstallService.installSourceBundle(bundleFileOrDirectory),
                 commandSource, bundle -> {
                     bundle.start();
-                    commandSource.sendMessage(Text.builder("Install successful").color(TextColors.GREEN).append().build());
+                    commandSource.sendMessage(Text.builder("Successful (built and) installed " + bundleFileOrDirectory).color(TextColors.GREEN).append().build());
                 });
     }
 }

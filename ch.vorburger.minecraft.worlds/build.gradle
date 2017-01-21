@@ -1,0 +1,5 @@
+
+dependencies {
+  compile project(":ch.vorburger.minecraft.osgi.api")
+  compile 'org.osgi:org.osgi.core:6.0.0'
+}

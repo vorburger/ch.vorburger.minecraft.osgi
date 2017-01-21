@@ -16,27 +16,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.vorburger.minecraft.osgi.dev.internal.infratomove;
+package ch.vorburger.minecraft.utils;
 
-import java.util.concurrent.Callable;
-import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 /**
- * Utilities for {@link CommandException}.
+ * Utilities for {@link Text}.
  *
  * @author Michael Vorburger.ch
  */
-public final class CommandExceptions {
+public final class Texts {
 
-    private CommandExceptions() { }
+    private Texts() { }
 
-    // TODO find a better name for this method
-    public static <T> T doAndWrap(String description, Callable<T> callable) throws CommandException {
-        try {
-            return callable.call();
-        } catch (Exception cause) {
-            throw new CommandException(Texts.fromThrowable(description, cause), cause, true);
-        }
+    public static Text fromThrowable(String prefix, Throwable throwable) {
+        return Text.builder(prefix + throwable.getMessage()).color(TextColors.RED).append().build();
     }
-
 }

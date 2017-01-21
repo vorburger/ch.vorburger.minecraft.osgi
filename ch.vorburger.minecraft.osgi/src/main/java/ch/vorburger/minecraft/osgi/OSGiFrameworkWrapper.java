@@ -18,13 +18,12 @@
  */
 package ch.vorburger.minecraft.osgi;
 
+import ch.vorburger.osgi.embedded.PackagesBuilder;
 import ch.vorburger.osgi.utils.BundleInstaller;
-import com.google.common.base.Joiner;
-import com.google.common.reflect.ClassPath;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -64,10 +63,12 @@ public class OSGiFrameworkWrapper implements BundleInstaller {
         config.put(Constants.FRAMEWORK_STORAGE_CLEAN, Constants.FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT);
         config.put(Constants.FRAMEWORK_STORAGE, frameworkStorageDirectory.getAbsolutePath());
         // not FRAMEWORK_SYSTEMPACKAGES but _EXTRA
-        config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
-                "org.slf4j;version=\"1.7\","
-              + "ch.vorburger.minecraft.osgi.api,"
-              + getSubPackages("org.spongepowered.api")
+        config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, new PackagesBuilder()
+                .addPackage("org.slf4j", "1.7")
+                .addPackage("ch.vorburger.minecraft.osgi.api")
+                .addPackageWithSubPackages("com.google.common", "17.0.0")
+                .addPackageWithSubPackages("org.spongepowered.api")
+                .build()
             );
 
         FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
@@ -75,13 +76,6 @@ public class OSGiFrameworkWrapper implements BundleInstaller {
 
         this.bootBundlesDirectory = bootBundlesDirectory;
         this.hotBundlesDirectory = hotBundlesDirectory;
-    }
-
-    private String getSubPackages(String basePackageName) throws IOException {
-        ClassPath classPath = ClassPath.from(getClass().getClassLoader());
-        Iterator<String> packageNames = classPath.getTopLevelClassesRecursive(basePackageName)
-            .stream().map(classInfo -> classInfo.getPackageName()).distinct().iterator();
-        return Joiner.on(",").join(packageNames);
     }
 
     /**
@@ -106,15 +100,18 @@ public class OSGiFrameworkWrapper implements BundleInstaller {
         System.setProperty("felix.fileinstall.debug", "1");
         System.setProperty("felix.fileinstall.noInitialDelay", "true");
 
+        return framework;
+    }
+
+    public List<Bundle> installBootBundles() throws BundleException {
         File[] jarFiles = bootBundlesDirectory.listFiles((dir, name) -> name.endsWith(".jar"));
         if (jarFiles == null) {
             LOG.warn("Nothing found in {} (does not exist?)", bootBundlesDirectory);
+            return Collections.emptyList();
         } else {
             LOG.info("Going to (non-HOT) install {} OSGi System Boot Bundle JARs found in {}", jarFiles.length, bootBundlesDirectory);
-            installBundles(jarFiles);
+            return installBundles(jarFiles);
         }
-
-        return framework;
     }
 
     @Override

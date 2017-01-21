@@ -40,6 +40,8 @@ public class Bootstrap {
         ApiImplBootstrap apiBootstrap = new ApiImplBootstrap();
         apiBootstrap.start(systemBundle.getBundleContext(), null);
 
+        osgiFramework.installBootBundles();
+
         return new Wrapper(osgiFramework, apiBootstrap);
     }
 

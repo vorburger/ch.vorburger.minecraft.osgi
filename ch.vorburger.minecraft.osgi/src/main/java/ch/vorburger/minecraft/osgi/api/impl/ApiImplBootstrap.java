@@ -22,6 +22,8 @@ import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import ch.vorburger.minecraft.osgi.api.Listeners;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.plugin.PluginContainer;
 
@@ -32,6 +34,8 @@ import org.spongepowered.api.plugin.PluginContainer;
  * @author Michael Vorburger
  */
 public class ApiImplBootstrap {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ApiImplBootstrap.class);
 
     private ServiceTracker<Listeners, Listeners> listenersTracker;
     @SuppressWarnings("rawtypes")
@@ -45,6 +49,7 @@ public class ApiImplBootstrap {
                 new EventListenerTrackerCustomizer(bundleContext, pluginContainer));
         commandRegistrationTracker = CommandRegistrationTrackerCustomizer.setUp(bundleContext, CommandRegistration.class,
                 new CommandRegistrationTrackerCustomizer(bundleContext, pluginContainer));
+        LOG.info("started tracking Minecraft services for CommandRegistration, EventListener & Listeners");
     }
 
     public void stop() {

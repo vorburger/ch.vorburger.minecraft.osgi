@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent.Login;
-import org.spongepowered.api.text.Text;
 
 // TODO @Service OSGi DS annotation
 public class ExampleEventListener implements EventListener<ClientConnectionEvent.Login> {
@@ -33,11 +32,7 @@ public class ExampleEventListener implements EventListener<ClientConnectionEvent
     @Override
     public void handle(Login loginEvent) throws Exception {
         LOG.info("onUserJoin()");
-        // NOTE there is also a Join instead of Login event type..
-        Text text = Text.of("WELCOME (EventListener)");
-        // TODO This is wrong and not visible to end-user in UI:
-        loginEvent.setMessage(text);
-        // User user = loginEvent.getTargetUser();
+        // see SimpleProjectTemplate
     }
 
 }

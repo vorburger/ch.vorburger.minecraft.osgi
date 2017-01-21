@@ -29,8 +29,8 @@ public class LoggingBundleListener implements BundleListener {
 
     @Override
     public void bundleChanged(BundleEvent event) {
-        LOG.info("BundleEvent type: {}, bundle: {}, origin: {}", getBundleEventTypeText(event.getType()),
-                event.getBundle().getSymbolicName(), event.getOrigin().getSymbolicName());
+        LOG.info("BundleEvent type: {}, bundle: {}, version: {}, origin: {}", getBundleEventTypeText(event.getType()),
+                event.getBundle().getSymbolicName(), event.getBundle().getVersion(), event.getOrigin().getSymbolicName());
     }
 
     private String getBundleEventTypeText(int type) {

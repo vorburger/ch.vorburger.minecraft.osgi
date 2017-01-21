@@ -20,6 +20,8 @@ package ch.vorburger.minecraft.osgi.api.impl;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.spongepowered.api.event.Event;
 import org.spongepowered.api.event.EventListener;
 
@@ -40,11 +42,24 @@ public final class EventListenerUtil {
         // We can't just do this:
         // Method handleMethod = listenerClass.getMethod(EVENT_LISTENER_HANDLE_METHOD_NAME, Event.class);
         // so we do this:
-        Method handleMethod = Arrays.asList(listenerClass.getMethods()).stream()
-                .filter(m -> m.getName().equals(EVENT_LISTENER_HANDLE_METHOD_NAME)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Failed to obtain 'handle' Method from listener: " + listener));
-        return (Class<T>) handleMethod.getParameterTypes()[0];
+        Method[] methods = listenerClass.getMethods();
+        List<Method> handleMethods = Arrays.asList(methods).stream()
+                .filter(m -> !m.getDeclaringClass().equals(EventListener.class))
+                .filter(m -> m.getName().equals(EVENT_LISTENER_HANDLE_METHOD_NAME))
+                .collect(Collectors.toList());
+        if (handleMethods.size() == 2) {
+            if (handleMethods.get(0).getParameterTypes()[0].equals(Event.class)) {
+                return (Class<T>) handleMethods.get(1).getParameterTypes()[0];
+            } else {
+                return (Class<T>) handleMethods.get(0).getParameterTypes()[0];
+            }
+        } if (handleMethods.size() == 1) {
+            return (Class<T>) handleMethods.get(0).getParameterTypes()[0];
+        } else if (handleMethods.size() > 2) {
+            throw new IllegalStateException("Finding best matching Event not yet implemented: " + handleMethods);
+        } else {
+            throw new IllegalArgumentException("Failed to obtain 'handle' Method from listener: " + listener);
+        }
     }
 
 }

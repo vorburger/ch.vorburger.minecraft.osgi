@@ -1,0 +1,4 @@
+[submodule "ch.vorburger.osgi.gradle"]
+	path = ch.vorburger.osgi.gradle
+	url = https://github.com/vorburger/ch.vorburger.osgi.gradle/
+	branch = master

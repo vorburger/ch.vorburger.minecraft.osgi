@@ -115,19 +115,20 @@ class SimpleProjectTemplate implements ProjectTemplate {
         ''', "src/main/java/demo/ExampleEventListener.java" -> '''
             package demo;
 
+            import java.util.Optional;
             import org.spongepowered.api.entity.living.player.Player;
             import org.spongepowered.api.event.EventListener;
-            import org.spongepowered.api.event.network.ClientConnectionEvent;
-            import org.spongepowered.api.event.network.ClientConnectionEvent.Join;
+            import org.spongepowered.api.event.action.CollideEvent;
             import org.spongepowered.api.text.Text;
 
-            public class ExampleEventListener implements EventListener<ClientConnectionEvent.Join> {
+            public class ExampleEventListener implements EventListener<CollideEvent> {
 
                 @Override
-                public void handle(Join joinEvent) throws Exception {
-                    Player player = joinEvent.getTargetEntity();
-                    String name = player.getName();
-                    player.sendMessage(Text.builder("Salut ").append(Text.of(name)).build());
+                public void handle(CollideEvent event) throws Exception {
+                    Optional<Player> playerOptional = event.getCause().<Player>first(Player.class);
+                    playerOptional.ifPresent(player -> {
+                        player.sendMessage(Text.builder("boing").build());
+                    });
                 }
 
             }

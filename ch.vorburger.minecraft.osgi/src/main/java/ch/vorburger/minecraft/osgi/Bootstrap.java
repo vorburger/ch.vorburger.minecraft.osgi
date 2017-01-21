@@ -38,7 +38,7 @@ public class Bootstrap {
         Bundle systemBundle = osgiFramework.start();
 
         ApiImplBootstrap apiBootstrap = new ApiImplBootstrap();
-        apiBootstrap.start(systemBundle.getBundleContext(), null);
+        apiBootstrap.start(systemBundle.getBundleContext(), pluginContainer);
 
         osgiFramework.installBootBundles();
 

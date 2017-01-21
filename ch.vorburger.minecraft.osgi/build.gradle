@@ -1,7 +1,9 @@
 apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
-  compile project(":ch.vorburger.minecraft.osgi.api")
+  compile(project(':ch.vorburger.minecraft.osgi.api')) {
+    exclude group: 'org.spongepowered'
+  }
   compileOnly 'org.spongepowered:spongeapi:5.1.0-SNAPSHOT'
   compile 'org.apache.felix:org.apache.felix.framework:5.6.1'
 

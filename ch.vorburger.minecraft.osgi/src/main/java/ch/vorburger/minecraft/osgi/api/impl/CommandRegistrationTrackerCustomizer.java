@@ -21,6 +21,8 @@ package ch.vorburger.minecraft.osgi.api.impl;
 import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import java.util.Optional;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandMapping;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -28,12 +30,22 @@ import org.spongepowered.api.plugin.PluginContainer;
 // TODO replace this with OSGi DS equivalent
 public class CommandRegistrationTrackerCustomizer extends AbstractServiceTrackerCustomizer<CommandRegistration, CommandMapping> {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CommandRegistrationTrackerCustomizer.class);
+
     protected CommandRegistrationTrackerCustomizer(BundleContext context, PluginContainer pluginContainer) {
         super(context, pluginContainer);
     }
 
     @Override
     protected Optional<CommandMapping> getRegistration(CommandRegistration service) {
+        if (service.callable() == null) {
+            LOG.error("callable() null; skipping CommandRegistration: {}", service);
+            return Optional.empty();
+        }
+        if (service.aliases() == null) {
+            LOG.error("aliases() null; skipping CommandRegistration: {}", service);
+            return Optional.empty();
+        }
         return Sponge.getCommandManager().register(pluginContainer, service.callable(), service.aliases());
     }
 

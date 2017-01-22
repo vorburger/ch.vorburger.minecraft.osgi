@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.vorburger.minecraft.osgi.dev.internal.infratomove;
+package ch.vorburger.minecraft.utils;
 
 import com.google.common.util.concurrent.FutureCallback;
 import org.spongepowered.api.text.channel.MessageReceiver;

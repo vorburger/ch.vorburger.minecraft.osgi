@@ -16,12 +16,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.vorburger.minecraft.osgi.dev.internal.infratomove;
+package ch.vorburger.minecraft.utils;
 
-import ch.vorburger.minecraft.utils.Texts;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.command.CommandSource;
@@ -41,6 +42,28 @@ public final class MessageReceivers {
 
     public static void sendException(MessageReceiver messageReceiver, String prefix, Throwable throwable) {
         messageReceiver.sendMessage(Texts.fromThrowable(prefix, throwable));
+    }
+
+    public static <V> void addCallback(CompletableFuture<V> future, MessageReceiver messageReceiver, SuccessCallback<V> callback) {
+        future.whenComplete(new BiConsumer<V, Throwable>() {
+            // similar to MessageReceivingFutureCallback
+            @Override
+            public void accept(V value, Throwable throwable) {
+                if (throwable != null) {
+                    onFailure(throwable);
+                } else {
+                    try {
+                        callback.onSuccess(value);
+                    } catch (Exception e) {
+                        onFailure(e);
+                    }
+                }
+            }
+
+            private void onFailure(Throwable throwable) {
+                MessageReceivers.sendException(messageReceiver, "Failed: " + throwable.getMessage(), throwable);
+            }
+        });
     }
 
     public static <V> void addCallback(ListenableFuture<V> future, MessageReceiver messageReceiver, SuccessCallback<V> callback) {

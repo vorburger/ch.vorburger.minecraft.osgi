@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.vorburger.minecraft.worlds;
+package ch.vorburger.minecraft.worlds.commands;
 
 import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import com.google.common.collect.ImmutableList;
@@ -51,9 +51,9 @@ public class ListWorldsCommand implements CommandRegistration, CommandExecutor {
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext args) throws CommandException {
         for (WorldProperties wordProperties : Sponge.getServer().getAllWorldProperties()) {
-            // TODO print a table with more properties
+            // TODO print a table with more properties (utility to format properties into table)
             // TODO make world name clickable to /tpw to
-            String line = wordProperties.getWorldName();
+            String line = wordProperties.getWorldName() + " (#" + wordProperties.getUniqueId() + ")";
             if (commandSource instanceof Player) {
                 Player player = (Player) commandSource;
                 if (player.getLocation().getExtent().getName().equals(wordProperties.getWorldName())) {

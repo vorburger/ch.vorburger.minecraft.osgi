@@ -31,6 +31,13 @@ public final class Texts {
     private Texts() { }
 
     public static Text fromThrowable(String prefix, Throwable throwable) {
-        return Text.builder(prefix + throwable.getMessage()).color(TextColors.RED).append().build();
+        // TODO have a Player isDeveloper flag (or Permission, probably..)
+        // developers get to see the cause stack trace? ;) Noob do not.
+        return Text.builder().color(TextColors.RED).append(Text.of(prefix + throwable.getMessage())).build();
+        // TODO add StackTrace here - with links being able to click on to jump into sources!!!
+    }
+
+    public static Text inRed(String content) {
+        return Text.builder().color(TextColors.RED).append(Text.of(content)).build();
     }
 }

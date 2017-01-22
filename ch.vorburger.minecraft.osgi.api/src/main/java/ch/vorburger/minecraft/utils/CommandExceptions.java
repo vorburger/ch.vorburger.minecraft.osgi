@@ -30,13 +30,27 @@ public final class CommandExceptions {
 
     private CommandExceptions() { }
 
-    // TODO find a better name for this method
-    public static <T> T doAndWrap(String description, Callable<T> callable) throws CommandException {
+    /**
+     * Invoke 'callable' and return its value,
+     * or rethrow any Exception from it wrapped in a CommandException,
+     * with description.
+     *
+     * @param description a humand-readable description of the Callable (used in the CommandException)
+     * @param callable the code to invoke
+     * @return the value returned by the callable
+     * @throws CommandException in case the callable failed with an Exception
+     */
+    public static <T> T getOrThrow(String description, Callable<T> callable) throws CommandException {
         try {
             return callable.call();
         } catch (Exception cause) {
+            // TODO see isDeveloper() idea in Texts.fromThrowable
             throw new CommandException(Texts.fromThrowable(description, cause), cause, true);
         }
+    }
+
+    public static CommandException create(String message) {
+        return new CommandException(Texts.inRed(message));
     }
 
 }

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.vorburger.minecraft.worlds;
+package ch.vorburger.minecraft.worlds.commands;
 
 import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import org.osgi.framework.BundleActivator;
@@ -28,6 +28,11 @@ public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         context.registerService(CommandRegistration.class, new ListWorldsCommand(), null);
         context.registerService(CommandRegistration.class, new TeleportToWorldCommand(), null);
+        context.registerService(CommandRegistration.class, new ImportWorldCommand(), null);
+        context.registerService(CommandRegistration.class, new DeleteWorldCommand(), null);
+        context.registerService(CommandRegistration.class, new RenameWorldCommand(), null);
+        context.registerService(CommandRegistration.class, new CreateWorldCommand(), null);
+        context.registerService(CommandRegistration.class, new ForkWorldCommand(), null);
     }
 
     @Override

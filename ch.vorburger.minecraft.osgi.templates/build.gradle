@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
   compile 'org.osgi:org.osgi.core:6.0.0'
-  compile 'com.google.guava:guava:20.0'
   compile 'org.eclipse.xtend:org.eclipse.xtend.lib:2.10.0'
 
   testCompile 'junit:junit:4.12'

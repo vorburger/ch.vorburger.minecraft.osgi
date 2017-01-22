@@ -33,6 +33,7 @@ artifacts {
 }
 
 build.dependsOn(shadowJar);
+install.dependsOn(shadowJar);
 
 jar.enabled = false
 

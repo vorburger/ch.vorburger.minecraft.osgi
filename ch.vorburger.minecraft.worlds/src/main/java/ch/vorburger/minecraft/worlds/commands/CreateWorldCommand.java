@@ -77,6 +77,7 @@ public class CreateWorldCommand implements CommandRegistration, CommandExecutor 
 
         WorldProperties loadedWorldProperties = CommandExceptions.getOrThrow("createWorldProperties: " + newWorldName,
                 () -> Sponge.getServer().createWorldProperties(newWorldName, WorldArchetypes.THE_SKYLANDS));
+        commandSource.sendMessage(Text.of("Create new world!"));
         return CommandResult.success();
     }
 

@@ -59,6 +59,12 @@ public class DeleteWorldCommand implements CommandRegistration, CommandExecutor 
     public CommandResult execute(CommandSource commandSource, CommandContext args) throws CommandException {
         WorldProperties worldProperties = args.<WorldProperties> getOne(ARG_WORLD).get();
 
+        if (!Sponge.getServer().getUnloadedWorlds().contains(worldProperties)) {
+            Sponge.getServer().loadWorld(worldProperties).ifPresent(world -> {
+                Sponge.getServer().unloadWorld(world);
+            });
+        }
+
         MessageReceivers.addCallback(Sponge.getServer().deleteWorld(worldProperties), commandSource, status ->
             commandSource.sendMessage(Text.of("world delete status: " + status))
         );

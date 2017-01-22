@@ -63,9 +63,10 @@ public class ForkWorldCommand implements CommandRegistration, CommandExecutor {
         WorldProperties worldProperties = args.<WorldProperties> getOne(ARG_WORLD).get();
         String forkWorldName = args.<String> getOne(ARG_FORK_NAME).get();
 
-        MessageReceivers.addCallback(Sponge.getServer().copyWorld(worldProperties, forkWorldName), commandSource, status ->
-            commandSource.sendMessage(Text.of("world fork status: " + status))
-        );
+        MessageReceivers.addCallback(Sponge.getServer().copyWorld(worldProperties, forkWorldName), commandSource, optNewWorldProperties -> {
+            optNewWorldProperties.ifPresent(newWorldProperties ->
+                commandSource.sendMessage(Text.of("world successfully forked: " + newWorldProperties.getWorldName())));
+        });
         return CommandResult.success();
     }
 

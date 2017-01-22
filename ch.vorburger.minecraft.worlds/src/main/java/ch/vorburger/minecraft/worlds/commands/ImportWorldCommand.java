@@ -24,6 +24,7 @@ import static org.spongepowered.api.command.args.GenericArguments.string;
 
 import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import ch.vorburger.minecraft.utils.CommandExceptions;
+import ch.vorburger.minecraft.utils.Texts;
 import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.util.List;
@@ -64,25 +65,31 @@ public class ImportWorldCommand implements CommandRegistration, CommandExecutor 
         String worldURI = args.<String>getOne("uri").get();
         // TODO (HACK) for now we'll just interpret this as a directory
         // the idea is to later handle URIs, like in BundleManager, and be able to import e.g. from GitHub!! ;)
-        File worldSavesDir = Sponge.getGame().getSavesDirectory().toFile();
+        File worldSavesDir = Sponge.getGame().getSavesDirectory().resolve("world").toFile();
         // worlds apparently (learnt the hard way..) HAVE to be in the saves directory!
         // if later we want arbitrary dirs, or stream from git, we'd have to copy/move them here:
         File worldDirectory = new File(worldSavesDir, worldURI);
-        if (!worldDirectory.exists() && !worldDirectory.isDirectory()) {
+        if (!(worldDirectory.exists() && worldDirectory.isDirectory())) {
             throw new CommandException(Text.of("Must be an existing directory, but isn't: " + worldDirectory));
         }
-        String dirName = worldDirectory.getAbsolutePath();
 
         // TODO this WorldArchetype metadata should be read from some properties [JSON/YAML] file along the world/ (saves/ ?) dir.
+        String newWorldName = worldDirectory.getName();
         WorldArchetype archetype = WorldArchetypes.OVERWORLD;
 
-        WorldProperties loadedWorldProperties = CommandExceptions.getOrThrow("createWorldProperties: " + dirName,
-                () -> Sponge.getServer().createWorldProperties(dirName, archetype));
+        WorldProperties loadedWorldProperties = CommandExceptions.getOrThrow("createWorldProperties: " + newWorldName,
+                () -> Sponge.getServer().createWorldProperties(newWorldName, archetype));
         if (loadedWorldProperties != null) {
+            Sponge.getServer().saveWorldProperties(loadedWorldProperties);
+
+            if (!loadedWorldProperties.getWorldName().equals(newWorldName)) {
+                commandSource.sendMessage(Texts.inRed("Uh oh; imported folder name does not match new world name... this is BAD!"));
+            }
+
             // TODO .onClick(TextActions.executeCallback(/tpw) ..
             commandSource.sendMessage(Text.of("OK, created new world " + loadedWorldProperties.getWorldName()));
         } else {
-            throw CommandExceptions.create("Failed to load: " + dirName);
+            throw CommandExceptions.create("Failed to load: " + newWorldName);
         }
         return CommandResult.success();
     }

@@ -47,9 +47,6 @@ public abstract class MessageReceivingFutureCallback<V> implements FutureCallbac
 
     @Override
     public final void onFailure(Throwable throwable) {
-        // FIRST log, then sendMessage() - just in case sendMessage also fails for any reason:
-        // TODO see during usage if this log is even needed, probably not, as it would likely duplicate:
-        // log.error("Build or Install failed", throwable);
         MessageReceivers.sendException(messageReceiver, "Failed: " + throwable.getMessage(), throwable);
     }
 

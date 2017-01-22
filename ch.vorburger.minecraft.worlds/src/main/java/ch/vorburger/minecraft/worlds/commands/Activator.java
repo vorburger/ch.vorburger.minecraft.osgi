@@ -29,7 +29,8 @@ public class Activator implements BundleActivator {
         context.registerService(CommandRegistration.class, new ListWorldsCommand(), null);
         context.registerService(CommandRegistration.class, new TeleportToWorldCommand(), null);
         context.registerService(CommandRegistration.class, new ImportWorldCommand(), null);
-        context.registerService(CommandRegistration.class, new DeleteWorldCommand(), null);
+        // Delete doesn't really seem to work all too well? Let's not offer it to users, yet:
+        // context.registerService(CommandRegistration.class, new DeleteWorldCommand(), null);
         context.registerService(CommandRegistration.class, new RenameWorldCommand(), null);
         context.registerService(CommandRegistration.class, new CreateWorldCommand(), null);
         context.registerService(CommandRegistration.class, new ForkWorldCommand(), null);

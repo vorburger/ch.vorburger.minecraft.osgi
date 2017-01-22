@@ -35,6 +35,7 @@ public class ListWorldsCommand implements CommandExecutor {
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("lists available worlds on this server"))
+                .permission("world.command.list")
                 .executor(this)
                 .build();
     }

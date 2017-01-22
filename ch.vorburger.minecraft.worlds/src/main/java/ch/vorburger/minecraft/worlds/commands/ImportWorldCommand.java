@@ -43,7 +43,7 @@ public class ImportWorldCommand implements CommandExecutor {
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Load an existing world"))
-                // TODO .permission("ch.vorburger.worlds.command.load")
+                .permission("world.command.import")
                 .arguments(seq(
                         onlyOne(string(Text.of("uri"))))
                     )

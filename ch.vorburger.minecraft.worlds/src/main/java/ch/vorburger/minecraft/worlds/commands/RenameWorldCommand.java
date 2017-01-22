@@ -43,7 +43,7 @@ public class RenameWorldCommand implements CommandExecutor {
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("rename a world"))
-                // TODO .permission("ch.vorburger.worlds.command.rename")
+                .permission("world.command.rename")
                 .arguments(seq(onlyOne(world(Text.of(ARG_WORLD))), onlyOne(string(Text.of(ARG_NEW_NAME)))))
                 .executor(this)
                 .build();

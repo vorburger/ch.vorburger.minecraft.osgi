@@ -47,7 +47,7 @@ public class TeleportToWorldCommand implements CommandExecutor {
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Teleport to another world"))
-                // TODO .permission("worlds.command.tpw")
+                .permission("world.command.tp")
                 .arguments(seq(playerOrSource(Text.of(ARG_TARGET)), onlyOne(world(Text.of(ARG_WORLD)))))
                 .executor(this)
                 .build();

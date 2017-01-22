@@ -40,7 +40,7 @@ public class DeleteWorldCommand implements CommandExecutor {
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Teleport to another world"))
-                // TODO .permission("worlds.command.tpw")
+                .permission("world.command.delete")
                 .arguments(onlyOne(world(Text.of(ARG_WORLD))))
                 .executor(this)
                 .build();

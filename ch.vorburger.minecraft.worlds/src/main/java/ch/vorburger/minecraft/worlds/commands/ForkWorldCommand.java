@@ -43,7 +43,7 @@ public class ForkWorldCommand implements CommandExecutor {
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Fork (copy) an existing world to another new one"))
-                // TODO .permission("ch.vorburger.worlds.command.fork")
+                .permission("world.command.fork")
                 .arguments(seq(onlyOne(world(Text.of(ARG_WORLD))), onlyOne(string(Text.of(ARG_FORK_NAME)))))
                 .executor(this)
                 .build();

@@ -42,7 +42,7 @@ public class CreateWorldCommand implements CommandExecutor {
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Teleport to another world"))
-                // TODO .permission("worlds.command.tpw")
+                .permission("world.command.create")
                 .arguments(seq(onlyOne(string(Text.of(ARG_NAME)))))
 /*
 

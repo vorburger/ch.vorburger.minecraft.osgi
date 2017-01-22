@@ -41,10 +41,13 @@ import org.spongepowered.api.text.format.TextColors;
  */
 public class BundleManager {
 
+    private final BundleManagerPersistence persistence;
     private final SourceInstallService sourceInstallService;
 
     public BundleManager(SourceInstallService sourceInstallService) {
         this.sourceInstallService = sourceInstallService;
+        this.persistence = new BundleManagerPersistence(sourceInstallService);
+        persistence.installAndStartAll();
     }
 
     // TODO something strongly typed instead of String, like choice-of local-fs VS git VS github VS userProject, and then a parser for it
@@ -72,7 +75,8 @@ public class BundleManager {
         MessageReceivers.addCallback(sourceInstallService.installSourceBundle(bundleFileOrDirectory),
                 commandSource, bundle -> {
                     bundle.start();
-                    commandSource.sendMessage(Text.builder("Successful (built and) installed " + bundleFileOrDirectory).color(TextColors.GREEN).append().build());
+                    persistence.add(bundleFileOrDirectory);
+                    commandSource.sendMessage(Text.builder("Successfully (built and) installed " + bundleFileOrDirectory).color(TextColors.GREEN).append().build());
                 });
     }
 }

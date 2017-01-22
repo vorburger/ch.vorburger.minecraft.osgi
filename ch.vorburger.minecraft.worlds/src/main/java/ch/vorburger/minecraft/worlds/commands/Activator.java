@@ -27,6 +27,9 @@ public class Activator implements BundleActivator {
     @Override
     public void start(BundleContext context) throws Exception {
         context.registerService(CommandRegistration.class, new WorldCommands(), null);
+        // just a shortcut so we can do "/tpw" instead of "/world tp"
+        // TODO later offer this through a generic /alias service; to which this plugin can contribute
+        context.registerService(CommandRegistration.class, new TeleportToWorldCommand(), null);
     }
 
     @Override

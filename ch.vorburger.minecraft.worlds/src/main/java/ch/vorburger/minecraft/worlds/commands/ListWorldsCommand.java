@@ -18,9 +18,6 @@
  */
 package ch.vorburger.minecraft.worlds.commands;
 
-import ch.vorburger.minecraft.osgi.api.CommandRegistration;
-import com.google.common.collect.ImmutableList;
-import java.util.List;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
@@ -33,14 +30,8 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.storage.WorldProperties;
 
-public class ListWorldsCommand implements CommandRegistration, CommandExecutor {
+public class ListWorldsCommand implements CommandExecutor {
 
-    @Override
-    public List<String> aliases() {
-        return ImmutableList.of("lsw", "worlds-list");
-    }
-
-    @Override
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("lists available worlds on this server"))

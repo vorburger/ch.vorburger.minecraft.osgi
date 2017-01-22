@@ -21,10 +21,7 @@ package ch.vorburger.minecraft.worlds.commands;
 import static org.spongepowered.api.command.args.GenericArguments.onlyOne;
 import static org.spongepowered.api.command.args.GenericArguments.world;
 
-import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import ch.vorburger.minecraft.utils.MessageReceivers;
-import com.google.common.collect.ImmutableList;
-import java.util.List;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
@@ -36,16 +33,10 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.storage.WorldProperties;
 
-public class DeleteWorldCommand implements CommandRegistration, CommandExecutor {
+public class DeleteWorldCommand implements CommandExecutor {
 
     private static final String ARG_WORLD = "world";
 
-    @Override
-    public List<String> aliases() {
-        return ImmutableList.of("world-delete");
-    }
-
-    @Override
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Teleport to another world"))

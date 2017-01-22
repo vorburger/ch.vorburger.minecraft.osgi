@@ -23,10 +23,7 @@ import static org.spongepowered.api.command.args.GenericArguments.playerOrSource
 import static org.spongepowered.api.command.args.GenericArguments.seq;
 import static org.spongepowered.api.command.args.GenericArguments.world;
 
-import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import com.flowpowered.math.vector.Vector3d;
-import com.google.common.collect.ImmutableList;
-import java.util.List;
 import java.util.Optional;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
@@ -42,17 +39,11 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.storage.WorldProperties;
 
-public class TeleportToWorldCommand implements CommandRegistration, CommandExecutor {
+public class TeleportToWorldCommand implements CommandExecutor {
 
     private static final String ARG_TARGET = "target";
     private static final String ARG_WORLD = "world";
 
-    @Override
-    public List<String> aliases() {
-        return ImmutableList.of("tpw", "world-tp");
-    }
-
-    @Override
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Teleport to another world"))

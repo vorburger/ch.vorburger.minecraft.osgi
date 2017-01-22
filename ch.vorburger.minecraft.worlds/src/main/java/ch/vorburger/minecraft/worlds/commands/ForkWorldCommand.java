@@ -23,10 +23,7 @@ import static org.spongepowered.api.command.args.GenericArguments.seq;
 import static org.spongepowered.api.command.args.GenericArguments.string;
 import static org.spongepowered.api.command.args.GenericArguments.world;
 
-import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import ch.vorburger.minecraft.utils.MessageReceivers;
-import com.google.common.collect.ImmutableList;
-import java.util.List;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
@@ -38,17 +35,11 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.storage.WorldProperties;
 
-public class ForkWorldCommand implements CommandRegistration, CommandExecutor {
+public class ForkWorldCommand implements CommandExecutor {
 
     private static final String ARG_WORLD = "world";
     private static final String ARG_FORK_NAME = "forkName";
 
-    @Override
-    public List<String> aliases() {
-        return ImmutableList.of("world-fork");
-    }
-
-    @Override
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Fork (copy) an existing world to another new one"))

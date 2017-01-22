@@ -26,14 +26,7 @@ public class Activator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        context.registerService(CommandRegistration.class, new ListWorldsCommand(), null);
-        context.registerService(CommandRegistration.class, new TeleportToWorldCommand(), null);
-        context.registerService(CommandRegistration.class, new ImportWorldCommand(), null);
-        // Delete doesn't really seem to work all too well? Let's not offer it to users, yet:
-        // context.registerService(CommandRegistration.class, new DeleteWorldCommand(), null);
-        context.registerService(CommandRegistration.class, new RenameWorldCommand(), null);
-        context.registerService(CommandRegistration.class, new CreateWorldCommand(), null);
-        context.registerService(CommandRegistration.class, new ForkWorldCommand(), null);
+        context.registerService(CommandRegistration.class, new WorldCommands(), null);
     }
 
     @Override

@@ -22,12 +22,9 @@ import static org.spongepowered.api.command.args.GenericArguments.onlyOne;
 import static org.spongepowered.api.command.args.GenericArguments.seq;
 import static org.spongepowered.api.command.args.GenericArguments.string;
 
-import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import ch.vorburger.minecraft.utils.CommandExceptions;
 import ch.vorburger.minecraft.utils.Texts;
-import com.google.common.collect.ImmutableList;
 import java.io.File;
-import java.util.List;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
@@ -41,14 +38,8 @@ import org.spongepowered.api.world.WorldArchetype;
 import org.spongepowered.api.world.WorldArchetypes;
 import org.spongepowered.api.world.storage.WorldProperties;
 
-public class ImportWorldCommand implements CommandRegistration, CommandExecutor {
+public class ImportWorldCommand implements CommandExecutor {
 
-    @Override
-    public List<String> aliases() {
-        return ImmutableList.of("world-import");
-    }
-
-    @Override
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Load an existing world"))

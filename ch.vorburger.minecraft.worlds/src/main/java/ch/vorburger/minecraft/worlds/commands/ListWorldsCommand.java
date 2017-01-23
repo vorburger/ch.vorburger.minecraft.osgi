@@ -45,7 +45,7 @@ public class ListWorldsCommand implements CommandExecutor {
         for (WorldProperties wordProperties : Sponge.getServer().getAllWorldProperties()) {
             // TODO print a table with more properties (utility to format properties into table)
             // TODO make world name clickable to /tpw to
-            String line = wordProperties.getWorldName() + " (#" + wordProperties.getUniqueId() + ")";
+            String line = wordProperties.getWorldName();
             if (commandSource instanceof Player) {
                 Player player = (Player) commandSource;
                 if (player.getLocation().getExtent().getName().equals(wordProperties.getWorldName())) {

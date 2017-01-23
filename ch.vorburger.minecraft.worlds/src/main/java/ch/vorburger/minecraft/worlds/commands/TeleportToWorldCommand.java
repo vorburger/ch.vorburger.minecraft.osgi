@@ -65,9 +65,6 @@ public class TeleportToWorldCommand implements CommandRegistration, CommandExecu
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext args) throws CommandException {
         WorldProperties worldProperties = args.<WorldProperties> getOne(ARG_WORLD).get();
-        commandSource.sendMessage(Text.of("OK, we'll teleport you into ",
-                Text.of(TextColors.GOLD, worldProperties.getWorldName()),
-                " in a moment..."));
         Optional<World> optWorld = Sponge.getServer().loadWorld(worldProperties);
         if (!optWorld.isPresent()) {
             throw new CommandException(Text.of("World [", Text.of(TextColors.AQUA, worldProperties.getWorldName()), "] was not found."));
@@ -75,6 +72,10 @@ public class TeleportToWorldCommand implements CommandRegistration, CommandExecu
         World world = optWorld.get();
 
         for (Player target : args.<Player>getAll(ARG_TARGET)) {
+            commandSource.sendMessage(Text.of("OK, we'll teleport ",
+                    Text.of(TextColors.DARK_BLUE, target.getName()), " into ",
+                    Text.of(TextColors.GOLD, worldProperties.getWorldName()),
+                    " in a moment..."));
             // TODO could persist last position of Player per world instead of jumping back to spawn
             Vector3d spawnPosition = worldProperties.getSpawnPosition().toDouble();
             target.transferToWorld(world.getName(), spawnPosition);

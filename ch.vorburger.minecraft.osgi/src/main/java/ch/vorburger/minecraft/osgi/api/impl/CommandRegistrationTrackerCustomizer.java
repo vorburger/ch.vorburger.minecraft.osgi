@@ -46,7 +46,11 @@ public class CommandRegistrationTrackerCustomizer extends AbstractServiceTracker
             LOG.error("aliases() null; skipping CommandRegistration: {}", service);
             return Optional.empty();
         }
-        return Sponge.getCommandManager().register(pluginContainer, service.callable(), service.aliases());
+        Optional<CommandMapping> optCommandMapping = Sponge.getCommandManager().register(pluginContainer, service.callable(), service.aliases());
+        optCommandMapping.ifPresent(commandMapping ->
+            LOG.info("Command registered as (primary) /{} (all: {})", commandMapping.getPrimaryAlias(), commandMapping.getAllAliases())
+        );
+        return optCommandMapping;
     }
 
     @Override

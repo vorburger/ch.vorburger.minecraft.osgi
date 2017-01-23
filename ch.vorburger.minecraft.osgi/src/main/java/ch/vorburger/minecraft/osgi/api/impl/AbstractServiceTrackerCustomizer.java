@@ -38,7 +38,7 @@ import org.spongepowered.api.plugin.PluginContainer;
  */
 public abstract class AbstractServiceTrackerCustomizer<T,R> implements ServiceTrackerCustomizer<T,T> {
 
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    protected final static Logger log = LoggerFactory.getLogger(AbstractServiceTrackerCustomizer.class);
 
     protected final BundleContext context;
     protected final PluginContainer pluginContainer;
@@ -63,7 +63,7 @@ public abstract class AbstractServiceTrackerCustomizer<T,R> implements ServiceTr
             Optional<R> optionalRegistration = getRegistration(service);
             optionalRegistration.ifPresent(registration -> {
                 serviceMappings.put(reference, registration);
-                log.info("Registered: {}", service);
+                log.debug("Registered: {}", service);
             });
             if (!optionalRegistration.isPresent()) {
                 log.warn("Registeration failed: {}", service);
@@ -82,7 +82,11 @@ public abstract class AbstractServiceTrackerCustomizer<T,R> implements ServiceTr
     public final void removedService(ServiceReference<T> reference, T service) {
         // in integration tests pluginContainer is null
         if (pluginContainer != null) {
-            serviceMappings.compute(reference, (k, v) -> { removeRegistration(v); return null; });
+            serviceMappings.compute(reference, (aReference, aService) -> {
+                removeRegistration(aService);
+                log.info("Unregistered: {}", aService);
+                return null;
+            });
         }
     }
 

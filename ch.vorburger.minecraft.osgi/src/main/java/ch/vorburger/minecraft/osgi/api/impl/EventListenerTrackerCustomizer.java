@@ -20,6 +20,8 @@ package ch.vorburger.minecraft.osgi.api.impl;
 
 import java.util.Optional;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -30,6 +32,8 @@ public class EventListenerTrackerCustomizer
         // extends AbstractServiceTrackerCustomizer<EventListener<? extends Event>, EventListener<? extends Event>> {
         extends AbstractServiceTrackerCustomizer<EventListener, EventListener> {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EventListenerTrackerCustomizer.class);
+
     public EventListenerTrackerCustomizer(BundleContext context, PluginContainer pluginContainer) {
         super(context, pluginContainer);
     }
@@ -39,6 +43,7 @@ public class EventListenerTrackerCustomizer
     protected Optional<EventListener> getRegistration(EventListener service) {
         Class eventClass = EventListenerUtil.getEventClass(service);
         Sponge.getEventManager().registerListener(pluginContainer, eventClass, service);
+        LOG.info("EventListener registered for event class {} : {}", eventClass.getName(), service);
         return Optional.of(service);
     }
 

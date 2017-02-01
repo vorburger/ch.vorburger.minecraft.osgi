@@ -49,8 +49,22 @@ public final class CommandExceptions {
         }
     }
 
+    public static void doOrThrow(String description, RunnableWithException runnable) throws CommandException {
+        try {
+            runnable.run();
+        } catch (Exception cause) {
+            // TODO see isDeveloper() idea in Texts.fromThrowable
+            throw new CommandException(Texts.fromThrowable(description, cause), cause, true);
+        }
+    }
+
     public static CommandException create(String message) {
         return new CommandException(Texts.inRed(message));
+    }
+
+    @FunctionalInterface
+    public static interface RunnableWithException {
+        void run() throws Exception;
     }
 
 }

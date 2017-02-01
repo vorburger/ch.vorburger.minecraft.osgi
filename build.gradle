@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-  id "com.github.hierynomus.license" version "0.13.1"
+  id 'com.github.hierynomus.license' version '0.13.1'
 }
 
 allprojects  {
@@ -34,7 +34,8 @@ subprojects {
 
   repositories {
     mavenLocal()
-    jcenter() // maven { url "http://repo.maven.apache.org/maven2" }
-    maven { url "http://repo.spongepowered.org/maven" }
+    jcenter() // maven { url 'http://repo.maven.apache.org/maven2' }
+    maven { /* name = 'spongepowered' */ url = 'http://repo.spongepowered.org/maven' }
+    // maven { /* name = 'minecraft'     */ url = 'https://libraries.minecraft.net' }
   }
 }

@@ -1,0 +1,29 @@
+plugins {
+  id "net.ltgt.apt" version "0.9"
+}
+
+dependencies {
+  compile     project(":ch.vorburger.minecraft.osgi.api")
+  compile     'org.osgi:org.osgi.core:6.0.0'
+
+  compileOnly 'org.immutables:value:2.4.0:annotations'
+  apt         'org.immutables:value:2.4.0'
+
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.mockito:mockito-core:2.7.1'
+  testCompile 'org.slf4j:slf4j-simple:1.7.21'
+
+  // TODO move this to an e.g. ch.vorburger.minecraft.testutils project
+  // spongecommon is shaded into spongevanilla, as is a lot more...
+  // testCompile 'org.spongepowered:spongecommon:5.1.0-SNAPSHOT'
+  // TODO in an ideal world, it would be nice to have a "lean" spongevanilla-core JAR
+  testCompile 'org.spongepowered:spongevanilla:1.10.2-5.1.0-BETA-369'
+  testCompile 'org.spongepowered:launchwrappertestsuite:1.0-SNAPSHOT'
+}
+
+test {
+    systemProperty 'lwts.tweaker', 'ch.vorburger.minecraft.testutils.TestTweaker'
+
+    // Run tests in a temporary directory
+    workingDir = {test.temporaryDir}
+}

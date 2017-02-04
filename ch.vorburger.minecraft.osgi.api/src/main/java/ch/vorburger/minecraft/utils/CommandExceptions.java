@@ -19,6 +19,8 @@
 package ch.vorburger.minecraft.utils;
 
 import java.util.concurrent.Callable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.api.command.CommandException;
 
 /**
@@ -27,6 +29,8 @@ import org.spongepowered.api.command.CommandException;
  * @author Michael Vorburger.ch
  */
 public final class CommandExceptions {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CommandExceptions.class);
 
     private CommandExceptions() { }
 
@@ -53,6 +57,8 @@ public final class CommandExceptions {
         try {
             runnable.run();
         } catch (Exception cause) {
+        	// TODO once the cause is properly throw to the user incl. stack trace, this log is probably redundant; then remove?
+            LOG.error("doOrThrow()", cause);
             // TODO see isDeveloper() idea in Texts.fromThrowable
             throw new CommandException(Texts.fromThrowable(description, cause), cause, true);
         }

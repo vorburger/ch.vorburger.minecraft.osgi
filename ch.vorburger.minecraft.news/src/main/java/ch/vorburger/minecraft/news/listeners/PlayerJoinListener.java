@@ -18,6 +18,8 @@
  */
 package ch.vorburger.minecraft.news.listeners;
 
+import ch.vorburger.minecraft.news.NewsRepository;
+import com.google.common.collect.Iterables;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
@@ -28,19 +30,26 @@ import org.spongepowered.api.text.title.Title;
 
 public class PlayerJoinListener implements EventListener<ClientConnectionEvent.Join> {
 
+    private final NewsRepository newsRepository;
+
+    public PlayerJoinListener(NewsRepository newsRepository) {
+        this.newsRepository = newsRepository;
+    }
+
     @Override
     public void handle(Join joinEvent) throws Exception {
         Player player = joinEvent.getTargetEntity();
         String name = player.getName();
 
-        player.sendTitle(
-                Title.builder().fadeIn(60).stay(500).fadeOut(100)
-                .title(Text.of(TextColors.WHITE, name).concat(Text.of(TextColors.GOLD, ", you've got NEWS!")))
-                // TODO Make this a clickable action link.. but does that even work in titles?
-                .subtitle(Text.of("Use /news to see what's changed on this server since you were last here..."))
-                .build()
-            );
-        // player.sendMessage(Text.builder("HELO, welcome...").color(TextColors.GOLD).append(Text.of(name)).build());
+        if (!Iterables.isEmpty(newsRepository.getAllNews())) {
+            player.sendTitle(
+                    Title.builder().fadeIn(60).stay(500).fadeOut(100)
+                    .title(Text.of(TextColors.WHITE, name, ", ", TextColors.GOLD, "you've got NEWS!"))
+                    // TODO Make this a clickable action link.. but does that even work in titles?
+                    .subtitle(Text.of("Type /news to see what's changed on this server since you were last here.."))
+                    .build()
+                );
+        }
     }
 
 }

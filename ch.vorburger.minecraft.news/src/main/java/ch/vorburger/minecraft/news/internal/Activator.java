@@ -40,7 +40,7 @@ public class Activator implements BundleActivator {
                 TextSerializers.JSON, Sponge.getServer(),
                 Sponge.getServiceManager().provideUnchecked(UserStorageService.class));
         NewsService newsService = new NewsServiceImpl(newsRepository);
-        context.registerService(EventListener.class, new PlayerJoinListener(), null);
+        context.registerService(EventListener.class, new PlayerJoinListener(newsRepository), null);
         context.registerService(CommandRegistration.class, new NewsCommand(newsService), null);
     }
 

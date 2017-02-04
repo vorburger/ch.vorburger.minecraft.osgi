@@ -23,12 +23,15 @@ import ch.vorburger.minecraft.news.News;
 import ch.vorburger.minecraft.news.NewsRepository;
 import ch.vorburger.minecraft.news.NewsService;
 import ch.vorburger.minecraft.utils.CommandExceptions;
+import ch.vorburger.minecraft.utils.Texts;
 import com.google.common.collect.Iterables;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
-import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.pagination.PaginationList;
 import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
@@ -47,29 +50,42 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void addNews(User author, String plainText) throws CommandException {
+    public void addNews(Player author, String plainText) throws CommandException {
         News news = ImmutableNews.builder().author(author).createdOn(Instant.now()).message(Text.of(plainText)).build();
-        CommandExceptions.doOrThrow("NewsRepository.addNews()", () -> newsRegistry.addNews(news));
+        CommandExceptions.doOrThrow("NewsRepository.addNews()", () -> {
+            newsRegistry.addNews(news);
+            author.sendMessage(Text.of("OK, saved your latest news!"));
+        });
     }
 
     @Override
-    public void sendAllNews(MessageReceiver msgReceiver) {
-        Iterable<News> newsList = newsRegistry.getAllNews();
-        PaginationService paginationService = Sponge.getServiceManager().provide(PaginationService.class).get();
-        PaginationList.Builder paginationBuilder = paginationService.builder();
-        paginationBuilder.title(Text.of("NEWS"));
-        paginationBuilder.contents(Iterables.transform(newsList, news -> news2text(news)));
-        paginationBuilder.sendTo(msgReceiver);
+    public void sendAllNews(MessageReceiver msgReceiver) throws CommandException {
+//        CommandExceptions.doOrThrow("NewsService.sendAllNews()", () -> {
+            Iterable<News> newsList = newsRegistry.getAllNews();
+            if (Iterables.isEmpty(newsList)) {
+                msgReceiver.sendMessage(Texts.inRed("Sorry, no news."));
+                return;
+            } else {
+                PaginationService paginationService = Sponge.getServiceManager().provide(PaginationService.class).get();
+                PaginationList.Builder paginationBuilder = paginationService.builder();
+                paginationBuilder.title(Text.of("NEWS"));
+                paginationBuilder.contents(Iterables.transform(newsList, news -> news2text(news)));
+                paginationBuilder.sendTo(msgReceiver);
+            }
+//        });
     }
 
     protected Text news2text(News news) {
-        // TODO could use http://www.ocpsoft.org/prettytime/ for like "2 days ago" etc.
-        // TODO DateTimeFormatter localizedDateTimeFormatter = dateTimeFormatter.withLocale(userLocale);
-        String createdOnAsString = dateTimeFormatter.format(news.createdOn());
+        // TODO could also use http://www.ocpsoft.org/prettytime/ for like "2 days ago" etc.
+        Locale userLocale = Locale.ENGLISH;
+        ZoneId userTimeZone = ZoneId.systemDefault();
+        DateTimeFormatter localizedDateTimeFormatter = dateTimeFormatter.withLocale(userLocale).withZone(userTimeZone);
+        String createdOnAsString = localizedDateTimeFormatter.format(news.createdOn());
+
         String authorName = news.author().getName();
 
-        return Text.of(TextColors.DARK_GRAY, createdOnAsString,
-                 TextColors.DARK_GREEN, authorName,
-                 news.message());
+        return Text.of(TextColors.DARK_GRAY, createdOnAsString, " ",
+                 TextColors.DARK_GREEN, authorName, ": ",
+                 TextColors.WHITE, news.message());
     }
 }

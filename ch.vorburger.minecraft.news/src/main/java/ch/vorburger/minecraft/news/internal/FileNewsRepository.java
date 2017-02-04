@@ -69,6 +69,8 @@ public class FileNewsRepository implements NewsRepository {
         this.allNews = load();
     }
 
+    // TODO Implement watching file and hot reload if it changes on disk.. or does Sponge already offer this OOB for config?
+
     @Override
     public synchronized void addNews(News news) throws IOException {
         StringBuilder sb = new StringBuilder();

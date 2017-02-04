@@ -19,6 +19,7 @@
 package ch.vorburger.minecraft.news.commands;
 
 import static org.spongepowered.api.command.args.GenericArguments.onlyOne;
+import static org.spongepowered.api.command.args.GenericArguments.optional;
 import static org.spongepowered.api.command.args.GenericArguments.requiringPermission;
 import static org.spongepowered.api.command.args.GenericArguments.string;
 
@@ -64,7 +65,8 @@ public class NewsCommand implements CommandRegistration, CommandExecutor {
                 .description(Text.of("Read news"))
                 .permission("ch.vorburger.news.read")
                 .arguments(
-                        requiringPermission(onlyOne(string(Text.of(ARG_NEWS))), "ch.vorburger.news.add"))
+                        optional(requiringPermission(onlyOne(string(Text.of(ARG_NEWS))), "ch.vorburger.news.add")))
+                		// TODO argument description "new news message text"
                 .executor(this)
                 .build();
     }

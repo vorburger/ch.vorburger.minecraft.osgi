@@ -19,7 +19,7 @@
 package ch.vorburger.minecraft.news;
 
 import org.spongepowered.api.command.CommandException;
-import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.channel.MessageReceiver;
 
 /**
@@ -29,8 +29,8 @@ import org.spongepowered.api.text.channel.MessageReceiver;
  */
 public interface NewsService {
 
-    void addNews(User author, String plainText) throws CommandException;
+    void addNews(Player author, String plainText) throws CommandException;
 
-    void sendAllNews(MessageReceiver msgReceiver);
+    void sendAllNews(MessageReceiver msgReceiver) throws CommandException;
 
 }

@@ -43,6 +43,11 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextParseException;
 import org.spongepowered.api.text.serializer.TextSerializer;
 
+/**
+ * Implementation of NewsRepository which uses a plain text flat file for persistence.
+ *
+ * @author Michael Vorburger
+ */
 public class FileNewsRepository implements NewsRepository {
 
     private static final Charset CHARSET = Charsets.UTF_8;
@@ -67,12 +72,15 @@ public class FileNewsRepository implements NewsRepository {
     @Override
     public synchronized void addNews(News news) throws IOException {
         StringBuilder sb = new StringBuilder();
-        dateTimeFormatter.formatTo(news.created(), sb);
+        dateTimeFormatter.formatTo(news.createdOn(), sb);
         sb.append(' ');
-        sb.append(news.byUser().getUniqueId().toString());
+        sb.append(news.author().getUniqueId().toString());
         sb.append(' ');
         sb.append(textSerializer.serialize(news.message()));
         sb.append('\n');
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+        }
         Files.append(sb.toString(), file, CHARSET);
         allNews.add(0, news);
     }
@@ -96,12 +104,12 @@ public class FileNewsRepository implements NewsRepository {
                         String uuidAsString = line.substring(indexOfSpace1 + 1, indexOfSpace2);
                         String textAsString = line.substring(indexOfSpace2 + 1);
 
-                        Instant created = dateTimeFormatter.parse(createdAsString, Instant::from);
+                        Instant createdOn = dateTimeFormatter.parse(createdAsString, Instant::from);
                         UUID uuid = UUID.fromString(uuidAsString);
                         User byUser = getUser(uuid);
                         Text message = textSerializer.deserialize(textAsString);
 
-                        loadedNews.add(ImmutableNews.builder().created(created).byUser(byUser).message(message).build());
+                        loadedNews.add(ImmutableNews.builder().createdOn(createdOn).author(byUser).message(message).build());
                     }
                     return true;
                 } catch (StringIndexOutOfBoundsException | DateTimeParseException | TextParseException | UserNotFoundException e) {
@@ -117,7 +125,7 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public synchronized List<News> getNews(/* TODO Instant since */) {
+    public synchronized List<News> getNewsSince(/* TODO Instant since */) {
 /*
         if (since < allNews.size()) {
             return Collections.unmodifiableList(allNews.subList(0, since + 1));

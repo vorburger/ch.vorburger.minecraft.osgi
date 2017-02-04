@@ -20,14 +20,17 @@ package ch.vorburger.minecraft.news;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.text.channel.MessageReceiver;
 
 /**
- * Stores news.
+ * Access News.
  *
  * @author Michael Vorburger
  */
 public interface NewsService {
 
-    void addNews(User user, String plainText) throws CommandException;
+    void addNews(User author, String plainText) throws CommandException;
+
+    void sendAllNews(MessageReceiver msgReceiver);
 
 }

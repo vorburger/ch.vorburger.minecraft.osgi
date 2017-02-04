@@ -27,7 +27,6 @@ import ch.vorburger.minecraft.news.internal.FileNewsRepository;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.Test;
@@ -55,18 +54,18 @@ public class NewsRepositoryTest {
         FILE.delete();
         NewsRepository newsRepository = fileNewsRepository();
         News news = ImmutableNews.builder()
-                .byUser(mockUser)
-                .created(Instant.now())
+                .author(mockUser)
+                .createdOn(Instant.now())
                 .message(Text.of("There's news!")).build();
         newsRepository.addNews(news);
 
-        List<News> newsList = newsRepository.getNews();
-        assertThat(newsList.get(0).message().toString()).contains("There's news!");
+        Iterable<News> newsList = newsRepository.getAllNews();
+        assertThat(newsList.iterator().next().message().toString()).contains("There's news!");
 
         NewsRepository freshNewsRepository = fileNewsRepository();
-        List<News> freshNewsList = freshNewsRepository.getNews();
+        Iterable<News> freshNewsList = freshNewsRepository.getAllNews();
         assertThat(freshNewsList).hasSize(1);
-        assertThat(newsList.get(0).message().toString()).contains("There's news!");
+        assertThat(newsList.iterator().next().message().toString()).contains("There's news!");
     }
 
     private FileNewsRepository fileNewsRepository() throws IOException {

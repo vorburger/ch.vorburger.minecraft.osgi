@@ -19,6 +19,7 @@
 package ch.vorburger.minecraft.news.internal;
 
 public class UserNotFoundException extends Exception {
+    private static final long serialVersionUID = 3509777550578925912L;
 
     public UserNotFoundException(String message) {
         super(message);

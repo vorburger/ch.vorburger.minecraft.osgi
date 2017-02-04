@@ -36,7 +36,7 @@ public class PlayerJoinListener implements EventListener<ClientConnectionEvent.J
         player.sendTitle(
                 Title.builder().fadeIn(60).stay(500).fadeOut(100)
                 .title(Text.of(TextColors.WHITE, name).concat(Text.of(TextColors.GOLD, ", you've got NEWS!")))
-                // Make this a clickable action link.. but does that even work in titles?
+                // TODO Make this a clickable action link.. but does that even work in titles?
                 .subtitle(Text.of("Use /news to see what's changed on this server since you were last here..."))
                 .build()
             );

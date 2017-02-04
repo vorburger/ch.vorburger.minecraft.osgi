@@ -80,9 +80,7 @@ public class NewsCommand implements CommandRegistration, CommandExecutor {
                 throw CommandExceptions.create("Only Player can add news");
             }
         } else {
-            // TODO 1. show all news
-            // TODO 2. show news since
-            // TODO 3. use pagination service
+            newsService.sendAllNews(src);
         }
         return CommandResult.success();
     }

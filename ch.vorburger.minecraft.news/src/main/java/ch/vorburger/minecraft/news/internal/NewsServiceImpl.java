@@ -23,12 +23,21 @@ import ch.vorburger.minecraft.news.News;
 import ch.vorburger.minecraft.news.NewsRepository;
 import ch.vorburger.minecraft.news.NewsService;
 import ch.vorburger.minecraft.utils.CommandExceptions;
+import com.google.common.collect.Iterables;
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.service.pagination.PaginationList;
+import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.channel.MessageReceiver;
+import org.spongepowered.api.text.format.TextColors;
 
 public class NewsServiceImpl implements NewsService {
+
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
 
     private final NewsRepository newsRegistry;
 
@@ -38,9 +47,29 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void addNews(User user, String plainText) throws CommandException {
-        News news = ImmutableNews.builder().byUser(user).created(Instant.now()).message(Text.of(plainText)).build();
+    public void addNews(User author, String plainText) throws CommandException {
+        News news = ImmutableNews.builder().author(author).createdOn(Instant.now()).message(Text.of(plainText)).build();
         CommandExceptions.doOrThrow("NewsRepository.addNews()", () -> newsRegistry.addNews(news));
     }
 
+    @Override
+    public void sendAllNews(MessageReceiver msgReceiver) {
+        Iterable<News> newsList = newsRegistry.getAllNews();
+        PaginationService paginationService = Sponge.getServiceManager().provide(PaginationService.class).get();
+        PaginationList.Builder paginationBuilder = paginationService.builder();
+        paginationBuilder.title(Text.of("NEWS"));
+        paginationBuilder.contents(Iterables.transform(newsList, news -> news2text(news)));
+        paginationBuilder.sendTo(msgReceiver);
+    }
+
+    protected Text news2text(News news) {
+        // TODO could use http://www.ocpsoft.org/prettytime/ for like "2 days ago" etc.
+        // TODO DateTimeFormatter localizedDateTimeFormatter = dateTimeFormatter.withLocale(userLocale);
+        String createdOnAsString = dateTimeFormatter.format(news.createdOn());
+        String authorName = news.author().getName();
+
+        return Text.of(TextColors.DARK_GRAY, createdOnAsString,
+                 TextColors.DARK_GREEN, authorName,
+                 news.message());
+    }
 }

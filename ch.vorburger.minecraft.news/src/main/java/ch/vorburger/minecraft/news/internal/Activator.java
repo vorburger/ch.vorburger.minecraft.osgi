@@ -35,8 +35,8 @@ public class Activator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        // TODO make directory of File("news.txt") configurable
-        NewsRepository newsRepository = new FileNewsRepository(new File("news.txt"),
+        // TODO make directory of File("news.txt") more configurable ...
+        NewsRepository newsRepository = new FileNewsRepository(new File("config/news/news.txt"),
                 TextSerializers.JSON, Sponge.getServer(),
                 Sponge.getServiceManager().provideUnchecked(UserStorageService.class));
         NewsService newsService = new NewsServiceImpl(newsRepository);

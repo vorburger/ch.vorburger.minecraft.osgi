@@ -19,10 +19,9 @@
 package ch.vorburger.minecraft.news;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
- * Service for You've got... News.
+ * Repository of You've got... News.
  *
  * @author Michael Vorburger
  */
@@ -30,6 +29,10 @@ public interface NewsRepository {
 
     void addNews(News news) throws IOException;
 
-    List<News> getNews(/* TODO Instant since */);
+    Iterable<News> getNewsSince(/* TODO Instant since */);
+
+    default Iterable<News> getAllNews() {
+        return getNewsSince(/* new Instant of the dawn of time */);
+    }
 
 }

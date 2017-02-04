@@ -31,9 +31,9 @@ import org.spongepowered.api.text.Text;
 @Value.Immutable
 public interface News {
 
-    Instant created();
+    Instant createdOn();
 
-    User byUser();
+    User author();
 
     Text message();
 

@@ -26,14 +26,19 @@ import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import java.io.File;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.EventListener;
+import org.spongepowered.api.service.user.UserStorageService;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 public class Activator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
         // TODO make directory of File("news.txt") configurable
-        NewsRepository newsRepository = new FileNewsRepository(new File("news.txt"));
+        NewsRepository newsRepository = new FileNewsRepository(new File("news.txt"),
+                TextSerializers.JSON, Sponge.getServer(),
+                Sponge.getServiceManager().provideUnchecked(UserStorageService.class));
         NewsService newsService = new NewsServiceImpl(newsRepository);
         context.registerService(EventListener.class, new PlayerJoinListener(), null);
         context.registerService(CommandRegistration.class, new NewsCommand(newsService), null);

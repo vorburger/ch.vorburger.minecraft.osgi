@@ -38,8 +38,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void addNews(User user, String text) throws CommandException {
-        News news = ImmutableNews.builder().byUser(user).created(Instant.now()).message(Text.of(text)).build();
+    public void addNews(User user, String plainText) throws CommandException {
+        News news = ImmutableNews.builder().byUser(user).created(Instant.now()).message(Text.of(plainText)).build();
         CommandExceptions.doOrThrow("NewsRepository.addNews()", () -> newsRegistry.addNews(news));
     }
 

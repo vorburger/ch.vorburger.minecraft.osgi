@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +46,7 @@ import org.spongepowered.api.text.serializer.TextSerializer;
 public class FileNewsRepository implements NewsRepository {
 
     private static final Charset CHARSET = Charsets.UTF_8;
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_INSTANT;
 
     private final File file;
     private final Server server;
@@ -65,7 +67,7 @@ public class FileNewsRepository implements NewsRepository {
     @Override
     public synchronized void addNews(News news) throws IOException {
         StringBuilder sb = new StringBuilder();
-        sb.append(news.created().toString());
+        dateTimeFormatter.formatTo(news.created(), sb);
         sb.append(' ');
         sb.append(news.byUser().getUniqueId().toString());
         sb.append(' ');
@@ -77,8 +79,8 @@ public class FileNewsRepository implements NewsRepository {
 
     private List<News> load() throws IOException {
         if (!file.exists()) {
-			return new ArrayList<>();
-		}
+            return new ArrayList<>();
+        }
         return Files.readLines(file, CHARSET, new LineProcessor<List<News>>() {
 
             List<News> loadedNews = new ArrayList<>();
@@ -94,7 +96,7 @@ public class FileNewsRepository implements NewsRepository {
                         String uuidAsString = line.substring(indexOfSpace1 + 1, indexOfSpace2);
                         String textAsString = line.substring(indexOfSpace2 + 1);
 
-                        Instant created = Instant.parse(createdAsString);
+                        Instant created = dateTimeFormatter.parse(createdAsString, Instant::from);
                         UUID uuid = UUID.fromString(uuidAsString);
                         User byUser = getUser(uuid);
                         Text message = textSerializer.deserialize(textAsString);
@@ -115,12 +117,15 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public synchronized List<News> getNews(int since) {
+    public synchronized List<News> getNews(/* TODO Instant since */) {
+/*
         if (since < allNews.size()) {
             return Collections.unmodifiableList(allNews.subList(0, since + 1));
         } else {
             return Collections.emptyList();
         }
+*/
+        return Collections.unmodifiableList(allNews);
     }
 
     // TODO move this into a utils service

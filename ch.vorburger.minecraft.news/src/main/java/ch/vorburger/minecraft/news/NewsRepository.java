@@ -30,6 +30,6 @@ public interface NewsRepository {
 
     void addNews(News news) throws IOException;
 
-    List<News> getNews(int since);
+    List<News> getNews(/* TODO Instant since */);
 
 }

@@ -60,11 +60,11 @@ public class NewsRepositoryTest {
                 .message(Text.of("There's news!")).build();
         newsRepository.addNews(news);
 
-        List<News> newsList = newsRepository.getNews(0);
+        List<News> newsList = newsRepository.getNews();
         assertThat(newsList.get(0).message().toString()).contains("There's news!");
 
         NewsRepository freshNewsRepository = fileNewsRepository();
-        List<News> freshNewsList = freshNewsRepository.getNews(0);
+        List<News> freshNewsList = freshNewsRepository.getNews();
         assertThat(freshNewsList).hasSize(1);
         assertThat(newsList.get(0).message().toString()).contains("There's news!");
     }

@@ -28,6 +28,6 @@ import org.spongepowered.api.entity.living.player.User;
  */
 public interface NewsService {
 
-    void addNews(User user, String text) throws CommandException;
+    void addNews(User user, String plainText) throws CommandException;
 
 }

@@ -19,12 +19,14 @@
 package ch.vorburger.minecraft.news.listeners;
 
 import ch.vorburger.minecraft.news.NewsRepository;
+import ch.vorburger.minecraft.news.commands.NewsCommand;
 import com.google.common.collect.Iterables;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent.Join;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.title.Title;
 
@@ -41,12 +43,16 @@ public class PlayerJoinListener implements EventListener<ClientConnectionEvent.J
         Player player = joinEvent.getTargetEntity();
         String name = player.getName();
 
-        if (!Iterables.isEmpty(newsRepository.getAllNews())) {
+        if (!Iterables.isEmpty(newsRepository.getAllNews())
+            && player.hasPermission(NewsCommand.READ_PERMISSION)) {
             player.sendTitle(
                     Title.builder().fadeIn(60).stay(500).fadeOut(100)
                     .title(Text.of(TextColors.WHITE, name, ", ", TextColors.GOLD, "you've got NEWS!"))
-                    // TODO Make this a clickable action link.. but does that even work in titles?
-                    .subtitle(Text.of("Type /news to see what's changed on this server since you were last here.."))
+                    .subtitle(Text.builder("Type /news to see what's new on this server")
+                    // .subtitle(Text.builder("Type /news to see what's changed on this server since you were last here..")
+                            // onClick() doesn't seem to work (yet?) for (sub)title, but it doesn't do any harm to already put it
+                            .onClick(TextActions.suggestCommand("/news"))
+                            .build())
                     .build()
                 );
         }

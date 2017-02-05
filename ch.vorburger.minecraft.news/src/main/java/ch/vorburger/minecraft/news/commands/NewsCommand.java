@@ -47,6 +47,7 @@ import org.spongepowered.api.text.Text;
 public class NewsCommand implements CommandRegistration, CommandExecutor {
 
     private static final String ARG_NEWS = "text";
+    public static final String READ_PERMISSION = "ch.vorburger.news.read";
 
     private final NewsService newsService;
 
@@ -63,10 +64,10 @@ public class NewsCommand implements CommandRegistration, CommandExecutor {
     public CommandCallable callable() {
         return CommandSpec.builder()
                 .description(Text.of("Read news"))
-                .permission("ch.vorburger.news.read")
+                .permission(READ_PERMISSION)
                 .arguments(
                         optional(requiringPermission(onlyOne(string(Text.of(ARG_NEWS))), "ch.vorburger.news.add")))
-                		// TODO argument description "new news message text"
+                        // TODO argument description "new news message text"
                 .executor(this)
                 .build();
     }

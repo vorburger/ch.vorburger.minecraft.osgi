@@ -28,7 +28,7 @@ public class WorldCommands implements CommandRegistration {
 
     @Override
     public List<String> aliases() {
-        return ImmutableList.of("world");
+        return ImmutableList.of("world", "world2");
     }
 
     @Override
@@ -43,6 +43,7 @@ public class WorldCommands implements CommandRegistration {
                 .child(new RenameWorldCommand().callable(), "rename")
                 .child(new CreateWorldCommand().callable(), "create")
                 .child(new ForkWorldCommand().callable(), "fork")
+                .child(new SetWorldGenerator().callable(), "setgenerator")
                 .build();
     }
 

@@ -2,3 +2,13 @@ dependencies {
   compile project(":ch.vorburger.minecraft.osgi.api")
   compile 'org.osgi:org.osgi.core:6.0.0'
 }
+
+// https://github.com/eclipse/che/issues/2669
+task createPom {
+    description "Generates a pom.xml in the project root directory; useful e.g. for IDEs which can read POM but don't directly support Gradle."
+    doLast {
+        pom {
+        }.writeTo("pom.xml")
+    }
+}
+

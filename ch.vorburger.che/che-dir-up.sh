@@ -1,0 +1,2 @@
+./che.sh dir up
+

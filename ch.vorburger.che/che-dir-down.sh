@@ -1,0 +1,3 @@
+./che.sh dir down
+
+

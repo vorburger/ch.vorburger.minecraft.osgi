@@ -1,3 +1,0 @@
-workspace.name = "nemesis"
-workspace.ram = 512
-workspace.projects[0].type = "maven"

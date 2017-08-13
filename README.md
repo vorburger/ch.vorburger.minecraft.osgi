@@ -2,7 +2,7 @@
 
 This is a [spongepowered.org](https://www.spongepowered.org/) Minecraft Server plugin which embeds an OSGi Framework ([Apache Felix](http://felix.apache.org/)).
 
-This Minecraft plugin can then (dynamically, HOT, re-*) load OSGi bundles as additional Minecraft plugins.  This dynamicity is very useful particularly during development, and gives you a very quick in-game change turn around experience while coding.
+This Minecraft plugin can then (dynamically, HOT, re-*) load OSGi bundles as additional Minecraft plugins.  This dynamicity is very useful particularly during development of extensions to a game which has a relatively "heavy" start-up time, incl. the typical disconnecting of game clients, and thus gives you a very quick in-game change turn around experience while coding.
 
 [Watch this early POC video on YouTube demonstrating live Minecraft mod development](https://www.youtube.com/watch?v=mibW8MhenGc), and see the [vorburger/HoTea project](https://github.com/vorburger/HoTea) for an earlier pre-OSGi take on (and superseded by) this.  Also check out the [ch.vorburger.osgi.gradle companion project](https://github.com/vorburger/ch.vorburger.osgi.gradle).
 
@@ -82,11 +82,11 @@ The `minecraft.osgi.users` which we just installed above makes it easy to now de
 
 4. In game, you should hvae just been greeted with a `HELO` message followed by `.. will install ..`.  This chat message is issued by `minecraft.osgi.users` on join.  More importantly, it has created a new development project for you under the `dev/` directory (which you created above).  The project is under a sub-directory with your player's Minecraft UUID.
 
-5. Open this new dev project in your favourite Java IDE (like e.g. [Eclipse](https://eclipse.org/downloads/), or IntelliJ's IDEA).  Note that this project uses Gradle for dependency management, so you must have Gradle support in your IDE (e.g. the latest Eclipse version Oxygen already includes [Buildship](https://projects.eclipse.org/projects/tools.buildship)).
+5. Open this new dev project in your favourite Java IDE (like e.g. [Eclipse](https://eclipse.org/downloads/), or IntelliJ's IDEA).  Note that this project uses Gradle for dependency management, so you must have Gradle support in your IDE (e.g. the latest Eclipse version Oxygen already includes [Buildship](https://projects.eclipse.org/projects/tools.buildship)).  (Gradle is also used to produced a valid OSGi MANIFEST.MF for the JAR, via [BND](http://bnd.bndtools.org).)
 
 6. Try out the example command this project registered by typing `/hello` into the in-game chat window (it should reply with the obligatory `Hello World!`).  Likewise, if you bump into anything, it will say `boing` in the chat.
 
-7. Note how this OSGi-based Minecraft Mod uses an OSGi Bundle `Activator`, instead of the typical Sponge `@Plugin` annotated class, to register its Minecraft Commands and Event Listeners. (_BTW: You could, of course, make your own Mod have both a Sponge Plugin class as well as an OSGi Activator, and register the same commands and listeners in it; thus creating a JAR which could be used in both environments._)
+7. Your mod can use the full [Sponge API](https://jd.spongepowered.org/).  But note how this OSGi-based Minecraft Mod uses an OSGi Bundle `Activator` (or BP or DS), instead of the typical Sponge `@Plugin` annotated class, to register its Minecraft Commands and Event Listeners. (_BTW: You could, of course, make your own Mod have both a Sponge Plugin class as well as an OSGi Activator, and register the same commands and listeners in it; thus creating a JAR which could be used in both environments._)
 
 8. Try changing something, say fix the chat message printed the `HelloWorldCommand` class from the (wrong) `"Hello World!"` to the ([correct](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program#History)) `"hello, world"` ... ;-)
 
@@ -96,4 +96,4 @@ The `minecraft.osgi.users` which we just installed above makes it easy to now de
 
 ## What else?
 
-The `ch.vorburger.minecraft.news` and `ch.vorburger.minecraft.worlds` are two example OSGi mods which you don't need to write your own, but can have a look at, and could optionally install into `osgi/boot` (with boot order prefix `6_...`) if you like.
+The `ch.vorburger.minecraft.news` and `ch.vorburger.minecraft.worlds` are two example OSGi mods which you don't need to write your own, but can have a look at, and could also optionally install into `osgi/boot` (with boot order prefix `6_...`) if you like.

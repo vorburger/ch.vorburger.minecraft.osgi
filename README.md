@@ -94,6 +94,11 @@ The `minecraft.osgi.users` which we just installed above makes it easy to now de
 
 10. If you re-try typing `/hello` now, you'll get the changed message.  This will work for ANY code changes, incl. new classes, etc.
 
+## Reference doc
+
+The `/osgi:install <URI>` command, where _URI_ is typically a `file:/` prefixed path to an OSGi bundle JAR file, or a directory to a Gradle project, installs (and, if it's a directory, continuously builds and HOT reloads) that OSGi bundle.  This lets you work with projects outside of your `dev/<User-UUID>/project1` directory.
+
+The `osgi/installedBundles` file lists all so installed bundles.  What is listed here is started on server boot, after those in the `osgi/system` directory.  You can edit this file, and e.g. remove the example `dev/<User-UUID>/project1` from here.    
 ## What else?
 
 The `ch.vorburger.minecraft.news` and `ch.vorburger.minecraft.worlds` are two example OSGi mods which you don't need to write your own, but can have a look at, and could also optionally install into `osgi/boot` (with boot order prefix `6_...`) if you like.

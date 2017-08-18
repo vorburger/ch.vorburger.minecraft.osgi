@@ -60,8 +60,8 @@ public class PlayerJoinListener implements EventListener<ClientConnectionEvent.J
         if (!userProject1.exists()) {
             userProject1.mkdirs();
             new ProjectWriter().writeProject(new SimpleProjectTemplate(), userProject1);
+            bundleManager.installBundle(player, userProject1);
         }
-        bundleManager.installBundle(player, userProject1);
     }
 
 }

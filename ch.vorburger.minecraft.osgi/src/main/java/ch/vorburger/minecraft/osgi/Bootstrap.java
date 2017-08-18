@@ -18,6 +18,7 @@
  */
 package ch.vorburger.minecraft.osgi;
 
+import ch.vorburger.minecraft.osgi.api.PluginInstance;
 import ch.vorburger.minecraft.osgi.api.impl.ApiImplBootstrap;
 import ch.vorburger.osgi.utils.BundleInstaller;
 import java.io.File;
@@ -26,39 +27,45 @@ import java.util.List;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.spongepowered.api.plugin.PluginContainer;
+import org.osgi.framework.ServiceRegistration;
 
 public class Bootstrap {
 
     // TODO find a better name for this class and the factory method
 
-    public static BundleInstaller bootstrapMinecraftOSGi(String osgiBasePath, PluginContainer pluginContainer) throws IOException, BundleException {
+    public static BundleInstaller bootstrapMinecraftOSGi(String osgiBasePath, PluginInstance pluginInstance) throws IOException, BundleException {
         File osgiBaseDirectory = new File(osgiBasePath);
         OSGiFrameworkWrapper osgiFramework = new OSGiFrameworkWrapper(osgiBaseDirectory);
         Bundle systemBundle = osgiFramework.start();
+        BundleContext bundleContext = systemBundle.getBundleContext();
+
+        ServiceRegistration<PluginInstance> pluginServiceRegistration = bundleContext.registerService(PluginInstance.class, pluginInstance, null);
 
         ApiImplBootstrap apiBootstrap = new ApiImplBootstrap();
-        apiBootstrap.start(systemBundle.getBundleContext(), pluginContainer);
+        apiBootstrap.start(bundleContext, pluginInstance.getPluginContainer());
 
         osgiFramework.installBootBundles();
 
-        return new Wrapper(osgiFramework, apiBootstrap);
+        return new Wrapper(osgiFramework, apiBootstrap, pluginServiceRegistration);
     }
 
     private static class Wrapper implements BundleInstaller {
 
         private final BundleInstaller delegate;
         private final ApiImplBootstrap apiBootstrap;
+        private final ServiceRegistration<?> pluginServiceRegistration;
 
-        public Wrapper(BundleInstaller delegate, ApiImplBootstrap apiBootstrap) {
+        public Wrapper(BundleInstaller delegate, ApiImplBootstrap apiBootstrap, ServiceRegistration<?> pluginServiceRegistration) {
             super();
             this.delegate = delegate;
             this.apiBootstrap = apiBootstrap;
+            this.pluginServiceRegistration = pluginServiceRegistration;
         }
 
         @Override
         public void close() throws Exception {
             apiBootstrap.stop();
+            delegate.getBundleContext().ungetService(pluginServiceRegistration.getReference());
             delegate.close();
         }
 

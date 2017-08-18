@@ -18,6 +18,7 @@
  */
 package ch.vorburger.minecraft.osgi;
 
+import ch.vorburger.minecraft.osgi.api.AbstractPlugin;
 import ch.vorburger.osgi.utils.BundleInstaller;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -25,7 +26,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.plugin.PluginContainer;
 
 /**
  * Sponge powered Minecraft plugin which sets up an
@@ -37,10 +37,9 @@ import org.spongepowered.api.plugin.PluginContainer;
     description = "Loads and reloads other Minecraft plugins (as OSGi bundles)",
     url = "https://github.com/vorburger/ch.vorburger.minecraft.osgi",
     authors = "Michael Vorburger.ch")
-public class MinecraftSpongePlugin {
+public class MinecraftSpongePlugin extends AbstractPlugin {
 
     @Inject private Logger logger;
-    @Inject private PluginContainer pluginContainer;
     // @Inject @DefaultConfig(sharedRoot = true) private ConfigurationLoader<CommentedConfigurationNode> configLoader;
     // @Inject private Game game;
 
@@ -50,7 +49,7 @@ public class MinecraftSpongePlugin {
     // public void onPreInit(GamePreInitializationEvent event) throws BundleException {
     public void onGameStartingServerEvent(GameStartingServerEvent event) throws Exception {
         logger.info("onGameStartingServerEvent()");
-        osgiFramework = Bootstrap.bootstrapMinecraftOSGi("osgi", pluginContainer);
+        osgiFramework = Bootstrap.bootstrapMinecraftOSGi("osgi", this);
     }
 
     @Listener

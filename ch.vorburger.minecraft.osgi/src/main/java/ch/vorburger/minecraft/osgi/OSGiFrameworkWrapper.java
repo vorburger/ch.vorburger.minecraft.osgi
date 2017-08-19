@@ -71,6 +71,8 @@ public class OSGiFrameworkWrapper implements BundleInstaller {
                 .addPackageWithSubPackages("com.google.common", "17.0.0")
                 .addPackageWithSubPackages("com.flowpowered.math")
                 .addPackageWithSubPackages("org.spongepowered.api")
+                .addPackage("javax.inject")
+                .addPackageWithSubPackages("com.google.inject")
                 .build()
             );
 

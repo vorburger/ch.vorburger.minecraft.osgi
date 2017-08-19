@@ -22,6 +22,8 @@ Please Star & Watch this project if it's of any interest or use to you!
     cd ..
     ./gradlew install
 
+NB: You must use `install` and not just `build` _(because the MinecraftOSGiTest fails otherwise)._
+
 ## Get a Sponge powered Minecraft server
 
 Create a home directory for the Minecraft server, and download the matching version (see `ch.vorburger.minecraft.osgi/build.gradle`) of the Sponge Vanilla JAR from [spongepowered.org](https://www.spongepowered.org) (e.g. spongevanilla-1.10.2-5.1.0-BETA-374.jar) into it, and try starting it once:
@@ -98,7 +100,7 @@ The `minecraft.osgi.users` which we just installed above makes it easy to now de
 
 The `/osgi:install <URI>` command, where _URI_ is typically a `file:/` prefixed path to an OSGi bundle JAR file, or a directory to a Gradle project, installs (and, if it's a directory, continuously builds and HOT reloads) that OSGi bundle.  This lets you work with projects outside of your `dev/<User-UUID>/project1` directory.
 
-The `osgi/installedBundles` file lists all so installed bundles.  What is listed here is started on server boot, after those in the `osgi/system` directory.  You can edit this file, and e.g. remove the example `dev/<User-UUID>/project1` from here.    
+The `osgi/installedBundles` file lists all so installed bundles.  What is listed here is started on server boot, after those in the `osgi/system` directory.  You can edit this file, and e.g. remove the example `dev/<User-UUID>/project1` from here.
 ## What else?
 
 The `ch.vorburger.minecraft.news` and `ch.vorburger.minecraft.worlds` are two example OSGi mods which you don't need to write your own, but can have a look at, and could also optionally install into `osgi/boot` (with boot order prefix `6_...`) if you like.

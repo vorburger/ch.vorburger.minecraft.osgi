@@ -1,5 +1,5 @@
 plugins {
-  id "org.xtend.xtend" version "0.4.14"
+  id 'org.xtext.builder' version '1.0.4'
 }
 
 dependencies {

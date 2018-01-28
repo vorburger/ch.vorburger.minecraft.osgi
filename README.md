@@ -18,9 +18,9 @@ Please Star & Watch this project if it's of any interest or use to you!
     cd ch.vorburger.minecraft.osgi
     git submodule update --init --recursive
     cd ch.vorburger.osgi.gradle
-    ./gradlew install
+    ./gradlew install test
     cd ..
-    ./gradlew install
+    ./gradlew install test
 
 NB: You must use `install` and not just `build` _(because the MinecraftOSGiTest fails otherwise)._
 
@@ -82,7 +82,7 @@ The `minecraft.osgi.users` which we just installed above makes it easy to now de
 
 3. Connect your Minecraft client to this local server
 
-4. In game, you should hvae just been greeted with a `HELO` message followed by `.. will install ..`.  This chat message is issued by `minecraft.osgi.users` on join.  More importantly, it has created a new development project for you under the `dev/` directory (which you created above).  The project is under a sub-directory with your player's Minecraft UUID.
+4. In game, you should have just been greeted with a `HELO` message followed by `.. will install ..`.  This chat message is issued by `minecraft.osgi.users` on join.  More importantly, it has created a new development project for you under the `dev/` directory (which you created above).  The project is under a sub-directory with your player's Minecraft UUID.
 
 5. Open this new dev project in your favourite Java IDE (like e.g. [Eclipse](https://eclipse.org/downloads/), or IntelliJ's IDEA).  Note that this project uses Gradle for dependency management, so you must have Gradle support in your IDE (e.g. the latest Eclipse version Oxygen already includes [Buildship](https://projects.eclipse.org/projects/tools.buildship)).  (Gradle is also used to produced a valid OSGi MANIFEST.MF for the JAR, via [BND](http://bnd.bndtools.org).)
 
@@ -101,6 +101,9 @@ The `minecraft.osgi.users` which we just installed above makes it easy to now de
 The `/osgi:install <URI>` command, where _URI_ is typically a `file:/` prefixed path to an OSGi bundle JAR file, or a directory to a Gradle project, installs (and, if it's a directory, continuously builds and HOT reloads) that OSGi bundle.  This lets you work with projects outside of your `dev/<User-UUID>/project1` directory.
 
 The `osgi/installedBundles` file lists all so installed bundles.  What is listed here is started on server boot, after those in the `osgi/system` directory.  You can edit this file, and e.g. remove the example `dev/<User-UUID>/project1` from here.
+
+When using it like this, you do not need to copy the `osgi.templates` and `osgi.users` (but all the other ones listed above).
+
 ## What else?
 
 The `ch.vorburger.minecraft.news` and `ch.vorburger.minecraft.worlds` are two example OSGi mods which you don't need to write your own, but can have a look at, and could also optionally install into `osgi/boot` (with boot order prefix `6_...`) if you like.

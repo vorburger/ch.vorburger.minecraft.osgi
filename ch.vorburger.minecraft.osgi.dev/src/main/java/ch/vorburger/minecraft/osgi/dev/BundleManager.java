@@ -20,7 +20,7 @@ package ch.vorburger.minecraft.osgi.dev;
 
 import ch.vorburger.minecraft.utils.CommandExceptions;
 import ch.vorburger.minecraft.utils.MessageReceivers;
-import ch.vorburger.osgi.gradle.SourceInstallService;
+import ch.vorburger.osgi.builder.SourceInstallService;
 import java.io.File;
 import java.net.URI;
 import org.spongepowered.api.command.CommandException;
@@ -60,7 +60,7 @@ public class BundleManager {
         File bundleFile = new File(bundleURI);
         installBundle(commandSource, bundleFile);
     }
-    // public void installBundle(User user, String bundleURI) {
+    // public void installBundle(User user, URI bundleURI) {
 
     // TODO keep bundle running when user logs out, or stop?
     public void installBundle(User user, File bundleFileOrDirectory) {

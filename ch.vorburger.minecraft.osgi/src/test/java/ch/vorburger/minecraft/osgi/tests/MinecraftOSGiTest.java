@@ -34,7 +34,7 @@ public class MinecraftOSGiTest {
 
     @Test
     public void testMain() throws Exception {
-        BundleInstaller osgiFramework = Bootstrap.bootstrapMinecraftOSGi("target/testOsgiFramework", null);
+        BundleInstaller osgiFramework = Bootstrap.bootstrapMinecraftOSGi("target/testOsgiFramework", () -> null);
 
         List<Bundle> bundles = osgiFramework.installBundles("file:../ch.vorburger.minecraft.osgi.testplugin/build/libs/ch.vorburger.minecraft.osgi.testplugin-1.0.0-SNAPSHOT.jar");
         Bundle testPluginBundle = bundles.get(0);

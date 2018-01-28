@@ -65,6 +65,7 @@ public class OSGiFrameworkWrapper implements BundleInstaller {
         config.put(Constants.FRAMEWORK_STORAGE, frameworkStorageDirectory.getAbsolutePath());
         // not FRAMEWORK_SYSTEMPACKAGES but _EXTRA
         config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, new PackagesBuilder()
+                // These are dependencies of the Sponge API:
                 .addPackage("org.slf4j", "1.7")
                 .addPackage("ch.vorburger.minecraft.osgi.api")
                 .addPackage("ch.vorburger.minecraft.utils")
@@ -74,6 +75,10 @@ public class OSGiFrameworkWrapper implements BundleInstaller {
                 .addPackageWithSubPackages("org.spongepowered.api")
                 .addPackage("javax.inject")
                 .addPackageWithSubPackages("com.google.inject")
+                // This works around https://github.com/netty/netty/issues/6548,
+                // needed until https://github.com/vorburger/minecraft-storeys-maker/
+                // can use a Netty version which includes that fix..
+                .addPackage("sun.misc")
                 .build()
             );
 

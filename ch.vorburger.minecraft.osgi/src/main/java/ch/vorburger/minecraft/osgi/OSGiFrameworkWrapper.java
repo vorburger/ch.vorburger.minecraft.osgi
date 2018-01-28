@@ -69,6 +69,7 @@ public class OSGiFrameworkWrapper implements BundleInstaller {
                 .addPackage("ch.vorburger.minecraft.osgi.api")
                 .addPackage("ch.vorburger.minecraft.utils")
                 .addPackageWithSubPackages("com.google.common", "17.0.0")
+                .addPackageWithSubPackages("org.apache.commons.lang3", "3.3.2")
                 .addPackageWithSubPackages("com.flowpowered.math")
                 .addPackageWithSubPackages("org.spongepowered.api")
                 .addPackage("javax.inject")

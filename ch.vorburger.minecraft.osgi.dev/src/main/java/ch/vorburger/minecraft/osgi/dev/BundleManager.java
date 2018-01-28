@@ -74,6 +74,7 @@ public class BundleManager {
         commandSource.sendMessage(Text.builder("OK; will install " + bundleFileOrDirectory).build());
         MessageReceivers.addCallback(sourceInstallService.installSourceBundle(bundleFileOrDirectory),
                 commandSource, bundle -> {
+                    // TODO start() can be removed on the next bump of osgi.gradle, because that now auto-starts (but it doesn't hurt to keep it either)
                     bundle.start();
                     persistence.add(bundleFileOrDirectory);
                     commandSource.sendMessage(Text.builder("Successfully (built and) installed " + bundleFileOrDirectory).color(TextColors.GREEN).append().build());

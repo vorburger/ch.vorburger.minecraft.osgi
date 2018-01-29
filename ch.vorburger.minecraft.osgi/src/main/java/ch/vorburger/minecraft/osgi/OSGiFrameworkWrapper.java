@@ -66,7 +66,7 @@ public class OSGiFrameworkWrapper implements BundleInstaller {
         // not FRAMEWORK_SYSTEMPACKAGES but _EXTRA
         config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, new PackagesBuilder()
                 // These are dependencies of the Sponge API:
-                .addPackage("org.slf4j", "1.7")
+                .addPackageWithSubPackages("org.slf4j", "1.7")
                 .addPackage("ch.vorburger.minecraft.osgi.api")
                 .addPackage("ch.vorburger.minecraft.utils")
                 .addPackageWithSubPackages("com.google.common", "17.0.0")

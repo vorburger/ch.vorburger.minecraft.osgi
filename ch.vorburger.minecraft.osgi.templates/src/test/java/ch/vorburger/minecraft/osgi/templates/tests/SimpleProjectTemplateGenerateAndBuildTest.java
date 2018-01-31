@@ -21,8 +21,8 @@ package ch.vorburger.minecraft.osgi.templates.tests;
 import ch.vorburger.minecraft.osgi.templates.ProjectTemplate;
 import ch.vorburger.minecraft.osgi.templates.ProjectWriter;
 import ch.vorburger.minecraft.osgi.templates.SimpleProjectTemplate;
-import ch.vorburger.osgi.gradle.internal.BuildService;
-import ch.vorburger.osgi.gradle.internal.BuildServiceImpl;
+import ch.vorburger.osgi.builder.gradle.internal.GradleBuildService;
+import ch.vorburger.osgi.builder.internal.BuildService;
 import com.google.common.io.Files;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +37,7 @@ public class SimpleProjectTemplateGenerateAndBuildTest {
         File testTemplateProjectBaseDir = Files.createTempDir();
         try {
             new ProjectWriter().writeProject(template, testTemplateProjectBaseDir);
-            try (BuildService bs = new BuildServiceImpl()) {
+            try (BuildService bs = new GradleBuildService()) {
                 bs.build(testTemplateProjectBaseDir, "build").get(1, TimeUnit.MINUTES);
             }
         } finally {

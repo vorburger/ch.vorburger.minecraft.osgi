@@ -18,6 +18,8 @@
  */
 package ch.vorburger.minecraft.osgi;
 
+import static java.util.Objects.requireNonNull;
+
 import ch.vorburger.minecraft.osgi.api.PluginInstance;
 import ch.vorburger.minecraft.osgi.api.impl.ApiImplBootstrap;
 import ch.vorburger.osgi.utils.BundleInstaller;
@@ -34,7 +36,8 @@ public class Bootstrap {
     // TODO find a better name for this class and the factory method
 
     public static BundleInstaller bootstrapMinecraftOSGi(String osgiBasePath, PluginInstance pluginInstance) throws IOException, BundleException {
-        File osgiBaseDirectory = new File(osgiBasePath);
+        requireNonNull(pluginInstance, "pluginInstance == null");
+        File osgiBaseDirectory = new File(requireNonNull(osgiBasePath, "osgiBasePath == null"));
         OSGiFrameworkWrapper osgiFramework = new OSGiFrameworkWrapper(osgiBaseDirectory);
         Bundle systemBundle = osgiFramework.start();
         BundleContext bundleContext = systemBundle.getBundleContext();

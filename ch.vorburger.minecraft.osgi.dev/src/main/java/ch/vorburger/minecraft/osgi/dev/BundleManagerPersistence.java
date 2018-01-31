@@ -19,7 +19,7 @@
 package ch.vorburger.minecraft.osgi.dev;
 
 import ch.vorburger.minecraft.utils.LoggingFutureCallback;
-import ch.vorburger.osgi.gradle.SourceInstallService;
+import ch.vorburger.osgi.builder.SourceInstallService;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.google.common.util.concurrent.Futures;

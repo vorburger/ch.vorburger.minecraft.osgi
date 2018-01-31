@@ -21,7 +21,7 @@ package ch.vorburger.minecraft.osgi.dev.internal;
 import ch.vorburger.minecraft.osgi.api.CommandRegistration;
 import ch.vorburger.minecraft.osgi.dev.BundleManager;
 import ch.vorburger.minecraft.osgi.dev.commands.InstallCommand;
-import ch.vorburger.osgi.gradle.SourceInstallService;
+import ch.vorburger.osgi.builder.SourceInstallService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;

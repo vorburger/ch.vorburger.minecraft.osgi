@@ -6,7 +6,7 @@ dependencies {
   compile     project(":ch.vorburger.minecraft.osgi.api")
   compile     'org.osgi:org.osgi.core:6.0.0'
 
-  compileOnly 'org.immutables:value:2.4.0:annotations'
+  compileOnly 'org.immutables:value:2.6.0:annotations'
   apt         'org.immutables:value:2.4.0'
 
   testCompile 'junit:junit:4.12'

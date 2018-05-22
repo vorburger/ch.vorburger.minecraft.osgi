@@ -8,7 +8,7 @@ dependencies {
   compile 'org.apache.felix:org.apache.felix.framework:5.6.10'
 
   testCompile 'junit:junit:4.12'
-  testCompile 'org.slf4j:slf4j-simple:1.7.21'
+  testCompile 'org.slf4j:slf4j-simple:1.7.25'
   // MinecraftOSGiTest relies on testplugin having been built before:
   testCompile project(":ch.vorburger.minecraft.osgi.testplugin")
 }

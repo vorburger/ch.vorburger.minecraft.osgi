@@ -12,7 +12,7 @@ dependencies {
   runtime 'org.apache.felix:org.apache.felix.framework:5.6.10'
   runtime 'org.slf4j:slf4j-simple:1.7.25'
 
-  testCompile 'commons-io:commons-io:2.5'
+  testCompile 'commons-io:commons-io:2.6'
   testCompile project(":ch.vorburger.minecraft.osgi.templates")
   testCompile 'ch.vorburger.osgi.gradle:ch.vorburger.osgi.gradle:1.0.0-SNAPSHOT' // project(":ch.vorburger.osgi.gradle")
   testCompile project(":ch.vorburger.minecraft.osgi")

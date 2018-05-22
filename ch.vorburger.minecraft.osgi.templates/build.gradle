@@ -8,6 +8,6 @@ dependencies {
 
   testCompile 'junit:junit:4.12'
   testCompile 'commons-io:commons-io:2.5'
-  testCompile 'org.slf4j:slf4j-simple:1.7.21'
+  testCompile 'org.slf4j:slf4j-simple:1.7.25'
   testCompile 'ch.vorburger.osgi.gradle:ch.vorburger.osgi.gradle:1.0.0-SNAPSHOT' // project(":ch.vorburger.osgi.gradle")
 }

@@ -7,7 +7,7 @@ dependencies {
   compile     'org.osgi:org.osgi.core:6.0.0'
 
   compileOnly 'org.immutables:value:2.6.0:annotations'
-  apt         'org.immutables:value:2.6.1'
+  apt         'org.immutables:value:2.6.3'
 
   testCompile 'junit:junit:4.12'
   testCompile 'org.mockito:mockito-core:2.18.3'

@@ -5,7 +5,7 @@ dependencies {
     exclude group: 'org.spongepowered'
   }
   compileOnly 'org.spongepowered:spongeapi:5.1.0-SNAPSHOT'
-  compile 'org.apache.felix:org.apache.felix.framework:5.6.10'
+  compile 'org.apache.felix:org.apache.felix.framework:6.0.1'
 
   testCompile 'junit:junit:4.12'
   testCompile 'org.slf4j:slf4j-simple:1.7.25'

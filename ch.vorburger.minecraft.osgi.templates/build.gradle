@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
   compile 'org.osgi:org.osgi.core:6.0.0'
-  compile 'org.eclipse.xtend:org.eclipse.xtend.lib:2.14.0'
+  compile 'org.eclipse.xtend:org.eclipse.xtend.lib:2.15.0'
 
   testCompile 'junit:junit:4.12'
   testCompile 'commons-io:commons-io:2.6'

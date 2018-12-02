@@ -1,5 +1,5 @@
 
-def paxExamVersion = '4.12.0'
+def paxExamVersion = '4.13.0'
 
 dependencies {
   // https://ops4j1.jira.com/wiki/display/PAXEXAM4/OSGi+Containers

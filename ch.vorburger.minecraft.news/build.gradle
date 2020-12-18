@@ -13,5 +13,5 @@ dependencies {
   testCompile 'org.mockito:mockito-core:2.25.0'
   testCompile 'org.slf4j:slf4j-simple:1.7.25'
 
-  testCompile 'com.google.truth:truth:0.42' // NOT 0.31 which pull 'com.google.guava:guava:20.0', but causes a mess for Gradle's testCompile VS compile; Gradle bug?!
+  testCompile 'com.google.truth:truth:0.43' // NOT 0.31 which pull 'com.google.guava:guava:20.0', but causes a mess for Gradle's testCompile VS compile; Gradle bug?!
 }
